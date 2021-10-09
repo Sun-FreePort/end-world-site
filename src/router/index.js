@@ -10,7 +10,29 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
+    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
+    children: [
+      {
+        path: 'square',
+        component: () => import(/* webpackChunkName: "home_square" */ '../components/home/Square.vue'),
+      },
+      {
+        path: 'market',
+        component: () => import(/* webpackChunkName: "home_market" */ '../components/home/Market.vue'),
+      },
+      {
+        path: 'work',
+        component: () => import(/* webpackChunkName: "home_work" */ '../components/home/Work.vue'),
+      },
+      {
+        path: 'store',
+        component: () => import(/* webpackChunkName: "home_store" */ '../components/home/Store.vue'),
+      },
+      {
+        path: 'outskirts',
+        component: () => import(/* webpackChunkName: "home_outskirts" */ '../components/home/Outskirts.vue'),
+      },
+    ],
   },
   {
     path: '/about',

@@ -1,5 +1,5 @@
 <template>
-  <w-form v-model="valid" style="margin: 0 20px">
+  <w-form @success="login" v-model="valid" style="margin: 0 20px">
     <w-input :label="$t('user.email')"
              v-model="email"
              :validators="[validators.required]"></w-input>
@@ -9,7 +9,7 @@
              type="password"></w-input>
 
     <div class="text-right mt6">
-      <w-button class="my1 mr2" type="submit" @click="login">
+      <w-button class="my1 mr2" type="submit">
         {{ $t('user.login') }}
       </w-button>
       <w-button class="my1" type="submit" @click="gotoRegister">

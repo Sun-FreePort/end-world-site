@@ -1,38 +1,27 @@
 <template>
-  <div class="home">
-    <Header id="header" :version="ver" :human="human" />
-    <img alt="Vue logo" src="../assets/logo.png">
-
-    <div>
-      <div>{{i}}</div>
-      <w-form style="margin: 0 20px">
-        <w-input :label="$t('user.email')" :validators="[validators.required]"></w-input>
-        <w-input :label="$t('user.password')" :validators="[validators.required]"></w-input>
-
-        <div class="text-right mt6">
-          <w-button
-            class="my1 mr2"
-            type="submit">{{ $t('user.login') }}</w-button>
-          <w-button
-            class="my1"
-            type="submit">{{ $t('user.gotoRegister') }}</w-button>
-        </div>
-      </w-form>
-
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-  </div>
+  <header style="margin-bottom: 6px;">
+    <Header id="header" :version="ver" :human="human"/>
+  </header>
+  <w-flex grow>
+    <aside>
+      <Aside />
+    </aside>
+    <main class="grow main-right">
+      <router-view></router-view>
+    </main>
+  </w-flex>
 </template>
 
 <script>
 // @ is an alias to /src
-import Header from '@/components/outside/Header.vue';
+import Header from '@/components/home/Header.vue';
+import Aside from '@/components/home/Aside.vue';
 
 export default {
   name: 'Home',
   components: {
     Header,
+    Aside,
   },
   data() {
     return {
@@ -43,18 +32,25 @@ export default {
       },
     };
   },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+  },
   mounted() {
-    if (!this.$store.state.user.token) {
+    if (!this.user.token) {
       console.info('123!');
       return this.$router.push('/');
     }
 
-    this.$http.get('ver').then((response) => {
-      this.human = response.data.human;
-      this.ver = response.data.ver;
-    }).catch((err) => {
-      console.error(err);
-    });
+    this.$http.get('ver')
+      .then((response) => {
+        this.human = response.data.human;
+        this.ver = response.data.ver;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
     return false;
   },
@@ -63,8 +59,10 @@ export default {
 
 <style lang="scss" scoped>
 #header {
-  //position: absolute;
-  top: 0;
   width: 100%;
+}
+
+.main-right {
+  margin-right: 3px;
 }
 </style>

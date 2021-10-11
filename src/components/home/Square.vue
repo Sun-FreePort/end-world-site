@@ -6,7 +6,9 @@
     <div class="box">委员会：暂无</div>
     <div class="box" style="color: beige">- - - - - -</div>
     <div class="box" style="margin-bottom: 4px">
-      <w-button class="ma1" bg-color="info" shadow lg>我 要 演 讲</w-button>
+      <w-button class="ma1" bg-color="info" @click="showTalk = true" shadow lg>
+        {{ $t('city.talk') }}
+      </w-button>
     </div>
     <div class="box">
       <Lecture v-for="item in lecture"
@@ -18,6 +20,27 @@
                :avatar="item.avatar"
                :message="item.message"/>
     </div>
+
+    <!-- 演讲输入框 -->
+    <w-dialog
+      v-model="showTalk"
+      :width="250">
+      <w-textarea
+        class="mt2"
+        v-model="talk"
+        :placeholder="$t('city.squareTalk')">
+      </w-textarea>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button @click="submitTalk"
+                  bg-color="info"
+                  dark
+                  lg>
+          {{ $t('default.submit') }}
+        </w-button>
+      </template>
+    </w-dialog>
   </w-flex>
 </template>
 
@@ -38,6 +61,8 @@ export default {
         manage: 'null',
       },
       lecture: [],
+      showTalk: false,
+      talk: '',
     };
   },
   mounted() {
@@ -51,6 +76,29 @@ export default {
       });
 
     return false;
+  },
+  methods: {
+    submitTalk() {
+      this.showTalk = false;
+      this.$http.post('city/square/feel', { feel: val })
+        .then((response) => {
+          switch (response.status) {
+            case 200:
+              if (val === 1) {
+                this.likeAdd += response.data;
+              } else {
+                this.disAdd += response.data;
+              }
+              break;
+            default:
+              this.tip = this.$t(`error.square${response.status}`);
+              this.show = true;
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
   },
 };
 </script>

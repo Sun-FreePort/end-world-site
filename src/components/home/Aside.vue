@@ -27,6 +27,12 @@
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
+                @click="() => $router.push('/home/building')">
+        {{ $t('city.building') }}
+      </w-button>
+    </div>
+    <div class="box line">
+      <w-button class="ma1 grow menu-button" bg-color="info" md
                 @click="() => $router.push('/home/outskirts')">
         {{ $t('city.outskirts') }}
       </w-button>

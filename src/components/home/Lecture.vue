@@ -10,13 +10,14 @@
           </w-button>
         </div>
         <div class="box">
-          <w-button bg-color="error" @click="feel(2)">
+          <w-button bg-color="error" @click="feel(-1)">
             嘘声 ({{ dis + disAdd }})
           </w-button>
         </div>
       </w-flex>
     </template>
 
+    <!-- 提示 -->
     <w-dialog
       v-model="show"
       :width="250"
@@ -67,11 +68,9 @@ export default {
                 this.disAdd += response.data;
               }
               break;
-            case 201:
-              this.tip = this.$t('square.201');
-              this.show = true;
-              break;
             default:
+              this.tip = this.$t(`error.square${response.status}`);
+              this.show = true;
           }
         })
         .catch((err) => {

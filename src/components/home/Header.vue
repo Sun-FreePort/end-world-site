@@ -42,6 +42,6 @@ export default {
 }
 
 .city {
-  color: blue;
+  color: #d10000;
 }
 </style>

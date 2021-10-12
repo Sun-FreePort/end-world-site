@@ -65,6 +65,11 @@ export default {
       talk: '',
     };
   },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+  },
   mounted() {
     this.$http.get('city/square')
       .then((response) => {
@@ -80,15 +85,18 @@ export default {
   methods: {
     submitTalk() {
       this.showTalk = false;
-      this.$http.post('city/square/feel', { feel: val })
+      this.$http.post('city/square/lecture', { talk: this.talk })
         .then((response) => {
           switch (response.status) {
             case 200:
-              if (val === 1) {
-                this.likeAdd += response.data;
-              } else {
-                this.disAdd += response.data;
-              }
+              this.lecture.shift({
+                id: response.data.id,
+                like: 0,
+                dis: 0,
+                talk: this.talk,
+                name: this.user.name,
+                avatar: this.user.avatar,
+              });
               break;
             default:
               this.tip = this.$t(`error.square${response.status}`);

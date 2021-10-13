@@ -3,7 +3,12 @@ import { createI18n } from 'vue-i18n';
 const messages = {
   en: {
     time: {
-      nightfall: '黄昏',
+      cockcrow: '清晨', // 5~7
+      forenoon: '上午', // 7~12
+      noon: '中午', // 12~13
+      afternoon: '下午', // 13~17
+      nightfall: '黄昏', // 17~19
+      night: '夜晚', // 19~5
     },
     default: {
       en: 'English',
@@ -57,23 +62,29 @@ const messages = {
       talk: '我 要 演 讲',
     },
     error: {
+      boss403: '请至少保证自己能支付24个工时的薪资'
+      boss412: '该工场主无力支付薪资'
       building412: '该建筑正在开垦中，每种建筑只支持同时开垦一座',
       building201: '该建筑已完工，如需新建，请前往建筑界面破土动工',
       building404: '这种建筑已被移出游戏',
       building403: '建筑不存在或未完工',
       building409: '建筑当前的状态，已不适合进行这类工作',
+      building422: '建筑不存在',
       build500: '开垦异常，请稍后重试',
+      city404: '城市不存在',
       die400: '角色已死亡，是否重生（重生将恢复所有数值，丧失一切物资、建筑、经验，保有人际关系、级别）',
       goods404: '这种商品已被移出游戏',
+      job403: '招聘简章已失效',
       lecture500: '演讲失败，请稍后重试',
       land424: '需要升级',
       monster404: '这个怪物已被移出游戏',
+      profit403: '雇员税后薪资不能为 0',
       square201: '请勿重复发表意见',
       square404: '该演讲不存在',
       square412: '体力不足以支持你完成这次演讲',
       square500: '表达感受失败，请稍后重试',
       work201: '有工作进行中，现在无法安排新工作',
-      work412: '体力不足以支持你完成这么久的工作',
+      work412: '体力不足',
     },
     about: {
       title: 'About',

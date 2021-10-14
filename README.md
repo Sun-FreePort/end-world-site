@@ -33,3 +33,7 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### UI sketch
+
+UI sketch in `public\UI.drawio`, you can use Diagrams software or Diagrams IDEA plugin look it.

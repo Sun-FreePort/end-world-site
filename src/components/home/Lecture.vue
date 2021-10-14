@@ -1,6 +1,6 @@
 <template>
   <w-card class="card">
-    <span class="name">{{ name }}</span>: {{ message }}
+    <span class="name">{{ name }}</span>: {{ talk }}
 
     <template #actions>
       <w-flex justify-space-between>
@@ -46,7 +46,7 @@ export default {
     dis: Number,
     name: String,
     avatar: String,
-    message: String,
+    talk: String,
   },
   data() {
     return {
@@ -58,14 +58,17 @@ export default {
   },
   methods: {
     feel(val) {
-      this.$http.post('city/square/feel', { feel: val })
+      this.$http.post('city/square/feel', {
+        id: this.id,
+        feel: val,
+      })
         .then((response) => {
           switch (response.status) {
             case 200:
               if (val === 1) {
-                this.likeAdd += response.data;
+                this.likeAdd += 1;
               } else {
-                this.disAdd += response.data;
+                this.disAdd += 1;
               }
               break;
             default:

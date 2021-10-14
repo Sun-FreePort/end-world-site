@@ -20,7 +20,7 @@ const waveUI = new WaveUI(app, {
 
 const url = {
   production: 'https://api.uiosun.com/api/',
-  development: 'http://end-world.blog.com/api/',
+  development: process.env.VUE_APP_DEV_SITE,
 };
 app.config.globalProperties.$http = axios.create({
   baseURL: url[process.env.NODE_ENV],
@@ -45,6 +45,7 @@ app.config.globalProperties.$http.interceptors.response
     switch (error.response.status) {
       case 401:
         localStorage.removeItem('stateUser');
+        this.$router.push('/');
         // tip.fire({
         //   title: vueObj.$t('default.ops'),
         //   text: vueObj.$t('default.token_failed_to_sign'),

@@ -3,7 +3,13 @@
 ## Project setup
 ```
 npm install
+cp .env .env.locl
+# If you has other server, you can change server url in .env.local file
 ```
+
+### Import API file
+
+`EndWorld.postman_collection.json` from PostMan API Export.
 
 ### Compiles and hot-reloads for development
 ```

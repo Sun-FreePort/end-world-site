@@ -1,0 +1,723 @@
+{
+	"info": {
+		"_postman_id": "28adf2ed-eac4-4ddc-a07f-edba4a0e79ac",
+		"name": "EndWorld",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "战斗",
+			"item": [
+				{
+					"name": "探索",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{end-world}}/api/fight/adventure",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"fight",
+								"adventure"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "攻击",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{end-world}}/api/fight/attack",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"fight",
+								"attack"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "逃跑",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{end-world}}/api/fight/run-away",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"fight",
+								"run-away"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "用户",
+			"item": [
+				{
+					"name": "版本",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{end-world}}/api/ver",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"ver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "注册",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "9988772@qq.com",
+									"description": "邮箱",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "9988772@qq.com",
+									"description": "密码",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "海燕",
+									"description": "昵称，最大 Unicode 6 字；英文 11 字",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "1",
+									"description": "角色，1人类、2精灵、3矮人",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{end-world}}/api/register",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "登录",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "894848948@aa.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "894848948@aa.com",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "海燕",
+									"description": "昵称，最大 Unicode 6 字；英文 11 字",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "1",
+									"description": "角色，1人类、2精灵、3矮人",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{end-world}}/api/login",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户信息",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{end-world}}/api/user/info",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "库存信息",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{end-world}}/api/user/property",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"property"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "装备",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{end-world}}/api/user/equip",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"equip"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "活动",
+			"item": [
+				{
+					"name": "签到",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "v",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{end-world}}/api/activity/sign",
+							"host": [
+								"{{end-world}}"
+							],
+							"path": [
+								"api",
+								"activity",
+								"sign"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "城市",
+			"item": [
+				{
+					"name": "广场",
+					"item": [
+						{
+							"name": "获取广场信息",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/city/square?page=1&number=10",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"city",
+										"square"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "number",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "演讲",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/city/square/lecture?talk=啊吧吧吧",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"city",
+										"square",
+										"lecture"
+									],
+									"query": [
+										{
+											"key": "talk",
+											"value": "啊吧吧吧"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "感想",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/city/square/feel?id=2&feel=-1",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"city",
+										"square",
+										"feel"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "2"
+										},
+										{
+											"key": "feel",
+											"value": "-1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "工作",
+					"item": [
+						{
+							"name": "开拓建筑",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/city/build?id=1",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"city",
+										"build"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "发布招聘",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/city/job-notice?id=1&pay=1",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"city",
+										"job-notice"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1",
+											"description": "Job ID"
+										},
+										{
+											"key": "pay",
+											"value": "1",
+											"description": "工时薪资（税前）"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "停止招聘",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/city/job-notice?id=1",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"city",
+										"job-notice"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1",
+											"description": "Job ID"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "招聘列表",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/work/list?page=1&number=10",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"work",
+										"list"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "number",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "开始工作(for self)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/work/self?index=1&job=0&hour=1",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"work",
+										"self"
+									],
+									"query": [
+										{
+											"key": "index",
+											"value": "1",
+											"description": "建筑索引"
+										},
+										{
+											"key": "job",
+											"value": "0",
+											"description": "工作类型（主要是区分 0-开垦和实际工作）"
+										},
+										{
+											"key": "hour",
+											"value": "1",
+											"description": "持续工时"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "开始工作(for boss)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/work/job?id=1&hour=1",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"work",
+										"job"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1",
+											"description": "Job ID"
+										},
+										{
+											"key": "hour",
+											"value": "1",
+											"description": "持续工时"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "终止工作",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "v",
+										"value": "100",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{end-world}}/api/work/stop",
+									"host": [
+										"{{end-world}}"
+									],
+									"path": [
+										"api",
+										"work",
+										"stop"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "YViFC1GexaatHckwxNqvJb3JgAybl9OmOKn4S0jWZz4NxJkabogftRDzyBxU",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

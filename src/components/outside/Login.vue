@@ -7,6 +7,16 @@
              v-model="password"
              :validators="[validators.required]"
              type="password"></w-input>
+    <w-input :label="$t('user.name')"
+             v-if="isNew"
+             :validators="[validators.requiredIsNew]"
+             v-model="name"></w-input>
+    <w-flex class="mt4" wrap align-center justify-end>
+      <w-switch class="md6"
+                color="success"
+                v-model="isNew">{{ $t('user.newActor') }}
+      </w-switch>
+    </w-flex>
 
     <div class="text-right mt6">
       <w-button class="my1 mr2" type="submit">
@@ -26,9 +36,12 @@ export default {
     return {
       email: '',
       password: '',
+      isNew: false,
+      name: '',
       valid: false,
       validators: {
         required: (value) => !!value || this.$t('default.input.required'),
+        requiredIsNew: (value) => (this.isNew && !!value) || this.$t('default.input.required'),
         email: (value) => {
           const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           if (!emailRegex.test(String(value).toLowerCase())) {
@@ -45,10 +58,12 @@ export default {
     login() {
       if (!this.valid) return false;
 
-      this.$http.post('login', {
+      const params = {
         email: this.email,
         password: this.password,
-      }).then((resonse) => {
+      };
+      if (this.isNew) params.name = this.name;
+      this.$http.post('login', params).then((resonse) => {
         this.$store.commit('setUser', resonse.data.player);
         this.$router.push('/home');
       }).catch((error) => {

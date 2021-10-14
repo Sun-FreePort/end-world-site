@@ -18,7 +18,7 @@
                :like="item.like"
                :name="item.name"
                :avatar="item.avatar"
-               :message="item.message"/>
+               :talk="item.talk"/>
     </div>
 
     <!-- 演讲输入框 -->
@@ -63,6 +63,9 @@ export default {
       lecture: [],
       showTalk: false,
       talk: '',
+      count: 0,
+      page: 1,
+      number: 10,
     };
   },
   computed: {
@@ -71,10 +74,10 @@ export default {
     },
   },
   mounted() {
-    this.$http.get('city/square')
+    this.$http.get(`city/square?page=${this.page}&number=${this.number}`)
       .then((response) => {
-        this.city = response.data.city;
-        this.lecture = response.data.lecture;
+        this.count = response.data.count;
+        this.lecture = response.data.data;
       })
       .catch((err) => {
         console.error(err);
@@ -89,7 +92,8 @@ export default {
         .then((response) => {
           switch (response.status) {
             case 200:
-              this.lecture.shift({
+              this.count += 1;
+              this.lecture.unshift({
                 id: response.data.id,
                 like: 0,
                 dis: 0,

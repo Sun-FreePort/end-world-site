@@ -37,3 +37,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### UI sketch
 
 UI sketch in `public\UI.drawio`, you can use Diagrams software or Diagrams IDEA plugin look it.
+
+## Develop Roadmap
+
+If you're interesting for the game, roadmap in there: [End World - Trello](https://trello.com/b/iuaQDevz/end-world)
+
+## Design Doc
+
+If you're interesting for the game detail, design document in there: [文档编写指南](./doc/指南%20&%20进度/文档编写指南.md)

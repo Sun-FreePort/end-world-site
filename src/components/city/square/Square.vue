@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import Lecture from '@/components/home/Lecture.vue';
+import Lecture from '@/components/city/square/Lecture.vue';
 
 export default {
   name: 'Square',

@@ -3,37 +3,37 @@
     <div class="box"><img width="112" alt="City Avatar" src="https://img2.baidu.com/it/u=1881182452,3230762371&fm=26&fmt=auto"></div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/home/square')">
+                @click="() => $router.push('/square/square')">
         {{ $t('city.square') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/home/market')">
+                @click="() => $router.push('/square/market')">
         {{ $t('city.market') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/home/store')">
+                @click="() => $router.push('/square/store')">
         {{ $t('city.store') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/home/work')">
+                @click="() => $router.push('/square/work')">
         {{ $t('city.work') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/home/building')">
+                @click="() => $router.push('/square/building')">
         {{ $t('city.building') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/home/outskirts')">
+                @click="() => $router.push('/square/outskirts')">
         {{ $t('city.outskirts') }}
       </w-button>
     </div>

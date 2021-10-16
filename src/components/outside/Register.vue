@@ -22,6 +22,22 @@
         {{ $t('user.gotoLogin') }}
       </w-button>
     </div>
+
+    <w-dialog
+      v-model="alertShow"
+      :width="320">
+      <p>{{ errorMessage }}</p>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button
+          @click="alertShow = false"
+          bg-color="error"
+          dark>
+          Close
+        </w-button>
+      </template>
+    </w-dialog>
   </w-form>
 </template>
 
@@ -34,6 +50,8 @@ export default {
       email: '',
       password: '',
       code: '',
+      alertShow: false,
+      errorMessage: '',
       validators: {
         required: (value) => !!value || this.$t('default.input.required'),
         email: (value) => {
@@ -49,11 +67,7 @@ export default {
   },
   methods: {
     // 注册
-    register(event, ax) {
-      console.info(event);
-      console.info(ax);
-      if (!this.valid) return false;
-
+    register() {
       this.$http.post('register', {
         email: this.email,
         password: this.password,
@@ -62,9 +76,10 @@ export default {
       }).then((resonse) => {
         console.info(resonse);
         this.$store.commit('setUser', resonse.data.player);
-        this.$router.push('/home');
+        this.$router.push('/square');
       }).catch((error) => {
-        console.error(error);
+        this.errorMessage = this.$t(`error.${error.response.data.message}`);
+        this.alertShow = true;
       });
       return true;
     },

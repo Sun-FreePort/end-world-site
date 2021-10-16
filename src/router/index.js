@@ -8,33 +8,33 @@ const routes = [
     component: Guest,
   },
   {
-    path: '/home',
+    path: '/square',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
+    component: () => import(/* webpackChunkName: "square" */ '../views/Home.vue'),
     children: [
       {
         path: 'square',
-        component: () => import(/* webpackChunkName: "home_square" */ '../components/home/Square.vue'),
+        component: () => import(/* webpackChunkName: "home_square" */ '../components/city/square/Square.vue'),
       },
       {
         path: 'market',
-        component: () => import(/* webpackChunkName: "home_market" */ '../components/home/Market.vue'),
+        component: () => import(/* webpackChunkName: "home_market" */ '../components/city/market/Market.vue'),
       },
       {
         path: 'work',
-        component: () => import(/* webpackChunkName: "home_work" */ '../components/home/Work.vue'),
+        component: () => import(/* webpackChunkName: "home_work" */ '../components/city/work/Work.vue'),
       },
       {
         path: 'building',
-        component: () => import(/* webpackChunkName: "home_building" */ '../components/home/Building.vue'),
+        component: () => import(/* webpackChunkName: "home_building" */ '../components/city/building/Building.vue'),
       },
       {
         path: 'store',
-        component: () => import(/* webpackChunkName: "home_store" */ '../components/home/Store.vue'),
+        component: () => import(/* webpackChunkName: "home_store" */ '../components/city/store/Store.vue'),
       },
       {
         path: 'outskirts',
-        component: () => import(/* webpackChunkName: "home_outskirts" */ '../components/home/Outskirts.vue'),
+        component: () => import(/* webpackChunkName: "home_outskirts" */ '../components/city/square/Outskirts.vue'),
       },
     ],
   },

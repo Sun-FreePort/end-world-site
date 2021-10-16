@@ -26,6 +26,22 @@
         {{ $t('user.gotoRegister') }}
       </w-button>
     </div>
+
+    <w-dialog
+      v-model="alertShow"
+      :width="320">
+      <p>{{ errorMessage }}</p>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button
+          @click="alertShow = false"
+          bg-color="error"
+          dark>
+          Close
+        </w-button>
+      </template>
+    </w-dialog>
   </w-form>
 </template>
 
@@ -37,6 +53,8 @@ export default {
       email: '',
       password: '',
       isNew: false,
+      alertShow: false,
+      errorMessage: '',
       name: '',
       valid: false,
       validators: {
@@ -67,7 +85,8 @@ export default {
         this.$store.commit('setUser', resonse.data.player);
         this.$router.push('/home');
       }).catch((error) => {
-        console.error(error);
+        this.errorMessage = this.$t(`error.${error.response.data.message}`);
+        this.alertShow = true;
       });
       return true;
     },

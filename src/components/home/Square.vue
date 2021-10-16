@@ -93,6 +93,7 @@ export default {
           switch (response.status) {
             case 200:
               this.count += 1;
+              this.$store.commit('consumeUserEnergy', 60);
               this.lecture.unshift({
                 id: response.data.id,
                 like: 0,
@@ -108,7 +109,8 @@ export default {
           }
         })
         .catch((err) => {
-          console.error(err);
+          this.tip = this.$t(`error.${err.response.data}`);
+          this.show = true;
         });
     },
   },

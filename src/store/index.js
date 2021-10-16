@@ -49,6 +49,12 @@ export default createStore({
       state.user.token = loginData.api_token;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
+    // 更新用户体力
+    consumeUserEnergy(state, val) {
+      state.user.energy -= val;
+      // TODO 节流
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
   },
   actions: {
   },

@@ -49,6 +49,16 @@ export default createStore({
       state.user.token = loginData.api_token;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
+    // 刷新用户缓存
+    refreshUser(state) {
+      this.$http.get('user/info').then((resonse) => {
+        console.info(resonse.data);
+        const { token } = state.user;
+        state.user = resonse.data;
+        state.user.token = token;
+        localStorage.setItem('stateUser', JSON.stringify(state.user));
+      });
+    },
     // 更新用户体力
     consumeUserEnergy(state, val) {
       state.user.energy -= val;

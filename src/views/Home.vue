@@ -25,8 +25,6 @@ export default {
   },
   data() {
     return {
-      human: 0,
-      ver: '?',
       validators: {
         required: (value) => !!value || this.$t('default.input.required'),
       },
@@ -45,8 +43,20 @@ export default {
 
     this.$http.get('ver')
       .then((response) => {
-        this.human = response.data.human;
-        this.ver = response.data.ver;
+        if (this.$store.state.ver >= response.data.ver) {
+          return;
+        }
+
+        this.$http.get('config')
+          .then((cRes) => {
+            this.$store.commit('setConfig', {
+              ver: response.data.ver,
+              config: cRes.data,
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       })
       .catch((err) => {
         console.error(err);

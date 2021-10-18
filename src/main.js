@@ -45,7 +45,8 @@ app.config.globalProperties.$http.interceptors.response
     switch (error.response.status) {
       case 401:
         localStorage.removeItem('stateUser');
-        this.$router.push('/');
+        app.config.globalProperties.$store.commit('clearUser');
+        app.config.globalProperties.$router.push('/');
         // tip.fire({
         //   title: vueObj.$t('default.ops'),
         //   text: vueObj.$t('default.token_failed_to_sign'),

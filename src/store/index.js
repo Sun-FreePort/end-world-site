@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 
 export default createStore({
   state: {
+    nowVer: 0,
     user: {
       id: 0,
       token: null,
@@ -29,12 +30,34 @@ export default createStore({
       vip_at: 0,
       weapon_id: 0,
     },
+    config: {
+      building: [],
+      monster: [],
+      goods: [],
+    },
   },
   mutations: {
     // 读取本地缓存状态
     reloadLocalStorage(state) {
-      if (localStorage.getItem('stateUser')) {
-        state.user = JSON.parse(localStorage.getItem('stateUser'));
+      state.nowVer = localStorage.getItem('version') ?? 0;
+
+      let config = localStorage.getItem('config');
+      if (config) {
+        config = JSON.parse(config);
+        state.config.monster = config.monsters;
+        state.config.goods = config.goods;
+        state.config.building = config.building;
+      } else {
+        state.user = {
+          id: 0,
+          token: null,
+          name: '',
+        };
+      }
+
+      const user = localStorage.getItem('stateUser');
+      if (user) {
+        state.user = JSON.parse(user);
       } else {
         state.user = {
           id: 0,
@@ -48,6 +71,20 @@ export default createStore({
       state.user = loginData;
       state.user.token = loginData.api_token;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 检测版本
+    setConfig(state, playload) {
+      state.config.monster = playload.config.monsters;
+      state.config.goods = playload.config.goods;
+      state.config.building = playload.config.building;
+
+      localStorage.setItem('version', playload.ver);
+      localStorage.setItem('config', JSON.stringify(playload.config));
+    },
+    // 清理用户状态
+    clearUser(state) {
+      state.user.id = 0;
+      state.user.token = '';
     },
     // 刷新用户缓存
     refreshUser(state) {

@@ -3,37 +3,37 @@
     <div class="box"><img width="112" alt="City Avatar" src="https://img2.baidu.com/it/u=1881182452,3230762371&fm=26&fmt=auto"></div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/square/square')">
+                @click="() => $router.push('/home/square')">
         {{ $t('city.square') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/square/market')">
+                @click="() => $router.push('/home/market')">
         {{ $t('city.market') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/square/store')">
+                @click="() => $router.push('/home/store')">
         {{ $t('city.store') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/square/work')">
+                @click="() => $router.push('/home/work')">
         {{ $t('city.work') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/square/building')">
+                @click="() => $router.push('/home/building')">
         {{ $t('city.building') }}
       </w-button>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/square/outskirts')">
+                @click="() => $router.push('/home/outskirts')">
         {{ $t('city.outskirts') }}
       </w-button>
     </div>
@@ -41,22 +41,66 @@
     <div class="box line">
       {{ user.name }}
     </div>
-    <div class="box line">
-      {{ $t('user.energy') }}：{{ user.energy }}
-      ({{ Math.round(user.energy / user.energy_max * 100) }}%)
-    </div>
-    <div class="box line">
-      {{ $t('user.hungry') }}：{{ user.hungry }}
-      ({{ Math.round(user.hungry / user.hungry_max * 100) }}%)
-    </div>
-    <div class="box line">
-      {{ $t('user.hp') }}：{{ user.hp }}
-      ({{ Math.round(user.hp / user.hp_max * 100) }}%)
-    </div>
-    <div class="box line">
-      {{ $t('user.happy') }}：{{ user.happy }}
-      ({{ Math.round(user.happy / user.happy_max * 100) }}%)
-    </div>
+    <w-flex align-center class="wrapper line">
+      <div class="box">{{ $t('user.energy') }}:</div>
+      <div class="spacer">
+        <w-progress
+          v-model="energy"
+          size="1.3em"
+          outline
+          round
+          label
+          label-color="teal-light5"
+          color="light-blue"
+          stripes>
+        </w-progress>
+      </div>
+    </w-flex>
+    <w-flex align-center class="wrapper line">
+      <div class="box">{{ $t('user.hungry') }}:</div>
+      <div class="spacer">
+        <w-progress
+          v-model="hungry"
+          size="1.3em"
+          outline
+          round
+          label
+          label-color="teal-light5"
+          color="light-blue"
+          stripes>
+        </w-progress>
+      </div>
+    </w-flex>
+    <w-flex align-center class="wrapper line">
+      <div class="box">{{ $t('user.hp') }}:</div>
+      <div class="spacer">
+        <w-progress
+          v-model="hp"
+          size="1.3em"
+          outline
+          round
+          label
+          label-color="teal-light5"
+          color="light-blue"
+          stripes>
+        </w-progress>
+      </div>
+    </w-flex>
+    <w-flex align-center class="wrapper line">
+      <div class="box">{{ $t('user.happy') }}:</div>
+      <div class="spacer">
+        <w-progress
+          v-model="happy"
+          size="1.3em"
+          outline
+          round
+          label
+          label-color="teal-light5"
+          color="light-blue"
+          stripes>
+        </w-progress>
+      </div>
+    </w-flex>
 
     <div class="box line">
       <w-button class="ma1 grow menu-button"
@@ -74,12 +118,25 @@ export default {
     user() {
       return this.$store.state.user;
     },
+    happy() {
+      return ((this.user.happy / this.user.happy_max) * 100);
+    },
+    hp() {
+      return ((this.user.hp / this.user.hp_max) * 100);
+    },
+    hungry() {
+      return ((this.user.hungry / this.user.hungry_max) * 100);
+    },
+    energy() {
+      return ((this.user.energy / this.user.energy_max) * 100);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .line {
+  margin-top: 3px;
   width: 100%;
 }
 

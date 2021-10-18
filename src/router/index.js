@@ -8,33 +8,33 @@ const routes = [
     component: Guest,
   },
   {
-    path: '/square',
+    path: '/home',
     name: 'Home',
     component: () => import(/* webpackChunkName: "square" */ '../views/Home.vue'),
     children: [
       {
         path: 'square',
-        component: () => import(/* webpackChunkName: "home_square" */ '../components/city/square/Square.vue'),
+        component: () => import(/* webpackChunkName: "home_square" */ '../components/city/square/Index.vue'),
       },
       {
         path: 'market',
-        component: () => import(/* webpackChunkName: "home_market" */ '../components/city/market/Market.vue'),
+        component: () => import(/* webpackChunkName: "home_market" */ '../components/city/market/Index.vue'),
       },
       {
         path: 'work',
-        component: () => import(/* webpackChunkName: "home_work" */ '../components/city/work/Work.vue'),
+        component: () => import(/* webpackChunkName: "home_work" */ '../components/city/work/Index.vue'),
       },
       {
         path: 'building',
-        component: () => import(/* webpackChunkName: "home_building" */ '../components/city/building/Building.vue'),
+        component: () => import(/* webpackChunkName: "home_building" */ '../components/city/building/Index.vue'),
       },
       {
         path: 'store',
-        component: () => import(/* webpackChunkName: "home_store" */ '../components/city/store/Store.vue'),
+        component: () => import(/* webpackChunkName: "home_store" */ '../components/city/store/Index.vue'),
       },
       {
         path: 'outskirts',
-        component: () => import(/* webpackChunkName: "home_outskirts" */ '../components/city/square/Outskirts.vue'),
+        component: () => import(/* webpackChunkName: "home_outskirts" */ '../components/city/square/Index.vue'),
       },
     ],
   },
@@ -42,6 +42,11 @@ const routes = [
     path: '/about',
     name: 'About',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: Guest,
   },
 ];
 

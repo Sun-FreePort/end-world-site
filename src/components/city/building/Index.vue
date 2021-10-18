@@ -1,0 +1,39 @@
+<template>
+  <w-flex justify-space-between class="blue-light5--bg pa1 wrap">
+    <Building v-for="item in goods"
+           :key="item.id"
+           :id="item.id"
+           :index="item.prop_id"
+           :count="item.number"/>
+  </w-flex>
+</template>
+
+<script>
+import Building from '@/components/city/building/Building.vue';
+
+export default {
+  name: 'Index',
+  components: {
+    Building,
+  },
+  data() {
+    return {
+      goods: [],
+    };
+  },
+  mounted() {
+    // this.$http.get('user/property')
+    //   .then((response) => {
+    //     console.info(response.data);
+    //     this.goods = response.data;
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
+  },
+};
+</script>
+
+<style scoped>
+
+</style>

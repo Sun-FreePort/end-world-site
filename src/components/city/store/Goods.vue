@@ -1,17 +1,36 @@
 <template>
   <div class="box">
-    <img src="../../../assets/logo.png" width="64" :alt="name">
-    <p class="count">4200</p>
+    <img :src="iconBase64" width="64" :alt="name">
+    <p class="count">{{ count }}</p>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Goods',
+  props: {
+    id: Number,
+    index: Number, // 物品索引
+    count: Number,
+  },
   data() {
     return {
       name: 0,
+      iconBase64: '',
     };
+  },
+  computed: {
+    goods() {
+      return this.$store.state.config.goods[this.index - 1] ?? {
+        name: '',
+        icon: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
+      };
+    },
+  },
+  mounted() {
+    // TODO i18 name
+    this.name = this.goods.name;
+    this.iconBase64 = this.goods.icon;
   },
 };
 </script>

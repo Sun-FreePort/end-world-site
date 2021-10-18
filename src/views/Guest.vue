@@ -47,12 +47,14 @@ export default {
       return this.$router.push('home');
     }
 
-    this.$http.get('ver').then((response) => {
-      this.human = response.data.human;
-      this.ver = response.data.ver;
-    }).catch((err) => {
-      console.error(err);
-    });
+    this.$http.get('ver')
+      .then((response) => {
+        this.human = response.data.human;
+        this.ver = response.data.ver;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
     return false;
   },

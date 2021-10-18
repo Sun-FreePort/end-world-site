@@ -76,7 +76,7 @@ export default {
       }).then((resonse) => {
         console.info(resonse);
         this.$store.commit('setUser', resonse.data.player);
-        this.$router.push('/square');
+        this.$router.push('/home');
       }).catch((error) => {
         this.errorMessage = this.$t(`error.${error.response.data.message}`);
         this.alertShow = true;

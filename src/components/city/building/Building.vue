@@ -77,7 +77,7 @@
 export default {
   name: 'Building',
   props: {
-    index: Number, // 物品索引
+    index: Number, // 建筑索引
   },
   data() {
     return {
@@ -131,7 +131,6 @@ export default {
         return false;
       }
 
-      console.info(this.hour);
       if (this.hour < 1 || this.hour > 16 || this.hour !== Math.round(this.hour)) {
         this.tip = this.$t('work.hourIsInt');
         this.tipShow = true;
@@ -139,7 +138,15 @@ export default {
       }
 
       this.buildShow = false;
-      // TODO 提交开垦工作
+      this.$http.post('city/build', {
+        index: this.index,
+        hour: this.hour,
+      }).then((response) => {
+        console.info(response);
+      }).catch((error) => {
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
+      });
 
       return true;
     },

@@ -31,8 +31,8 @@ export default createStore({
       weapon_id: 0,
     },
     building: [],
-    work: null,
-    city: null,
+    work: {},
+    city: {},
     config: {
       building: [],
       monster: [],
@@ -42,6 +42,7 @@ export default createStore({
   mutations: {
     // 读取本地缓存状态
     reloadLocalStorage(state) {
+      console.info('ReloadLocalStorage!');
       state.ver = localStorage.getItem('version') ?? 0;
 
       let config = localStorage.getItem('config');
@@ -50,12 +51,11 @@ export default createStore({
         state.config.monster = config.monsters;
         state.config.goods = config.goods;
         state.config.building = config.building;
-      } else {
-        state.user = {
-          id: 0,
-          token: null,
-          name: '',
-        };
+      }
+
+      const city = localStorage.getItem('stateCity');
+      if (city) {
+        state.city = JSON.parse(city);
       }
 
       const user = localStorage.getItem('stateUser');
@@ -69,14 +69,9 @@ export default createStore({
         };
       }
 
-      const city = localStorage.getItem('stateCity');
-      if (city) {
-        state.city = JSON.parse(city);
-      }
-
       const work = localStorage.getItem('stateWork');
       if (work) {
-        state.city = JSON.parse(work);
+        state.work = JSON.parse(work);
       }
     },
     // 更新用户状态
@@ -87,6 +82,7 @@ export default createStore({
     },
     // 检测版本
     setConfig(state, playload) {
+      console.info('SetConfig!');
       state.config.monster = playload.config.monsters;
       state.config.goods = playload.config.goods;
       state.config.building = playload.config.building;

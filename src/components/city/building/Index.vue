@@ -1,10 +1,8 @@
 <template>
-  <w-flex justify-space-between class="blue-light5--bg pa1 wrap">
-    <Building v-for="item in goods"
-           :key="item.id"
-           :id="item.id"
-           :index="item.prop_id"
-           :count="item.number"/>
+  <w-flex column justify-center class="wrapper background">
+    <Building v-for="item in building"
+              :key="item.id"
+              :index="item.id"/>
   </w-flex>
 </template>
 
@@ -18,22 +16,28 @@ export default {
   },
   data() {
     return {
-      goods: [],
     };
   },
+  computed: {
+    building() {
+      return this.$store.state.config.building;
+    },
+  },
   mounted() {
-    // this.$http.get('user/property')
-    //   .then((response) => {
-    //     console.info(response.data);
-    //     this.goods = response.data;
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+    this.$http.get('city/building')
+      .then((response) => {
+        console.info(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.background {
+  min-height: 100px;
+  margin-left: 4px;
+}
 </style>

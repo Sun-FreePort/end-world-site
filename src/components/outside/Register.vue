@@ -73,9 +73,9 @@ export default {
         password: this.password,
         name: this.name,
         code: this.code,
-      }).then((resonse) => {
-        console.info(resonse);
-        this.$store.commit('setUser', resonse.data.player);
+      }).then((response) => {
+        console.info(response);
+        this.$store.commit('setUser', response.data.player);
         this.$router.push('/home');
       }).catch((error) => {
         this.errorMessage = this.$t(`error.${error.response.data.message}`);

@@ -1,5 +1,5 @@
 <template>
-  <w-flex justify-space-between class="blue-light5--bg pa1 wrap">
+  <w-flex justify-space-between class="blue-light5--bg pa1 wrap background">
     <Goods v-for="item in goods"
            :key="item.id"
            :id="item.id"
@@ -24,7 +24,6 @@ export default {
   mounted() {
     this.$http.get('user/property')
       .then((response) => {
-        console.info(response.data);
         this.goods = response.data;
       })
       .catch((err) => {
@@ -35,4 +34,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.background {
+  min-height: 100px;
+  margin-left: 2px;
+}
 </style>

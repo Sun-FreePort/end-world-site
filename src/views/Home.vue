@@ -1,6 +1,6 @@
 <template>
   <header style="margin-bottom: 6px;">
-    <Header id="header" :version="ver" :human="human"/>
+    <Header id="header" />
   </header>
   <w-flex grow>
     <aside>
@@ -37,10 +37,10 @@ export default {
   },
   mounted() {
     if (!this.user.token) {
-      console.info('123!');
       return this.$router.push('/');
     }
 
+    // 版本不同时，更新配置
     this.$http.get('ver')
       .then((response) => {
         if (this.$store.state.ver >= response.data.ver) {
@@ -61,6 +61,24 @@ export default {
       .catch((err) => {
         console.error(err);
       });
+
+    // 每日首次登录时，获取服务器最新用户信息
+    const time = localStorage.getItem('upgradeTime');
+    if (!time || time < new Date(new Date().toLocaleDateString()).getTime() / 1000) {
+      this.$http.get('user/info')
+        .then((response) => {
+          this.$store.commit('refreshUser', {
+            user: response.data.user,
+            building: response.data.building,
+            work: response.data.work,
+            city: response.data.city,
+          });
+          localStorage.setItem('upgradeTime', new Date(new Date().toLocaleDateString()).getTime() / 1000);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
 
     return false;
   },

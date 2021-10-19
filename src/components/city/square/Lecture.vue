@@ -20,8 +20,7 @@
     <!-- 提示 -->
     <w-dialog
       v-model="show"
-      :width="250"
-      title="Dialog 2">
+      :width="250">
       <p>{{ tip }}</p>
 
       <template #actions>
@@ -30,7 +29,7 @@
                   bg-color="info"
                   dark
                   lg>
-          {{ $t('default.sure') }}
+          {{ $t('default.know') }}
         </w-button>
       </template>
     </w-dialog>

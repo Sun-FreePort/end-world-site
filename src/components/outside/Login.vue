@@ -81,8 +81,8 @@ export default {
         password: this.password,
       };
       if (this.isNew) params.name = this.name;
-      this.$http.post('login', params).then((resonse) => {
-        this.$store.commit('setUser', resonse.data.player);
+      this.$http.post('login', params).then((response) => {
+        this.$store.commit('setUser', response.data.player);
         this.$router.push('/home');
       }).catch((error) => {
         this.errorMessage = this.$t(`error.${error.response.data.message}`);

@@ -2,7 +2,7 @@ import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    nowVer: 0,
+    ver: 0,
     user: {
       id: 0,
       token: null,
@@ -30,6 +30,9 @@ export default createStore({
       vip_at: 0,
       weapon_id: 0,
     },
+    building: [],
+    work: null,
+    city: null,
     config: {
       building: [],
       monster: [],
@@ -39,7 +42,7 @@ export default createStore({
   mutations: {
     // 读取本地缓存状态
     reloadLocalStorage(state) {
-      state.nowVer = localStorage.getItem('version') ?? 0;
+      state.ver = localStorage.getItem('version') ?? 0;
 
       let config = localStorage.getItem('config');
       if (config) {
@@ -65,6 +68,16 @@ export default createStore({
           name: '',
         };
       }
+
+      const city = localStorage.getItem('stateCity');
+      if (city) {
+        state.city = JSON.parse(city);
+      }
+
+      const work = localStorage.getItem('stateWork');
+      if (work) {
+        state.city = JSON.parse(work);
+      }
     },
     // 更新用户状态
     setUser(state, loginData) {
@@ -87,19 +100,26 @@ export default createStore({
       state.user.token = '';
     },
     // 刷新用户缓存
-    refreshUser(state) {
-      this.$http.get('user/info').then((resonse) => {
-        console.info(resonse.data);
-        const { token } = state.user;
-        state.user = resonse.data;
-        state.user.token = token;
-        localStorage.setItem('stateUser', JSON.stringify(state.user));
-      });
+    refreshUser(state, playload) {
+      state.work = playload.work;
+      state.building = playload.building;
+      state.city = playload.city;
+      state.user = playload.user;
+      state.user.token = playload.user.api_token;
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+      localStorage.setItem('stateCity', JSON.stringify(playload.city));
+      localStorage.setItem('stateWork', JSON.stringify(playload.work));
     },
-    // 更新用户体力
+    // 设置用户
+    setWork(state, work) {
+      state.work = work;
+    },
+    setBuilding(state, building) {
+      state.building = building;
+    },
+    // 消耗用户体力
     consumeUserEnergy(state, val) {
       state.user.energy -= val;
-      // TODO 节流
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
   },

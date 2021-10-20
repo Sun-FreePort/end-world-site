@@ -102,18 +102,43 @@
       </div>
     </w-flex>
 
-    <div class="box line">
+    <div class="box line" v-if="signShow">
       <w-button class="ma1 grow menu-button"
                 bg-color="success"
+                @click="sign"
                 md>{{ $t('user.sign') }}
       </w-button>
     </div>
+
+    <!-- 提示 -->
+    <w-dialog
+      v-model="tipShow"
+      :width="250">
+      <p>{{ tip }}</p>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button @click="tipShow = false"
+                  bg-color="info"
+                  dark
+                  lg>
+          {{ $t('default.know') }}
+        </w-button>
+      </template>
+    </w-dialog>
   </w-flex>
 </template>
 
 <script>
 export default {
   name: 'Aside',
+  data() {
+    return {
+      signShow: false,
+      tipShow: false,
+      tip: '',
+    };
+  },
   computed: {
     user() {
       return this.$store.state.user;
@@ -129,6 +154,31 @@ export default {
     },
     energy() {
       return ((this.user.energy / this.user.energy_max) * 100);
+    },
+  },
+  mounted() {
+    const signTime = localStorage.getItem('signTime');
+    if (!signTime || signTime < new Date(new Date().toLocaleDateString()).getTime()) {
+      this.signShow = true;
+    }
+  },
+  methods: {
+    sign() {
+      this.$http.get('activity/sign').then((response) => {
+        switch (response.status) {
+          case 200:
+            break;
+          default:
+            this.tip = this.$t(`error.${response.data.message}`);
+            this.tipShow = true;
+            break;
+        }
+        localStorage.setItem('signTime', new Date(new Date().toLocaleDateString()).getTime());
+        this.signShow = false;
+      }).catch((error) => {
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
+      });
     },
   },
 };

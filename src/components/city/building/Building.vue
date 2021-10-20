@@ -52,23 +52,23 @@
           {{ $t('default.cancel') }}
         </w-button>
       </template>
+    </w-dialog>
 
-      <!-- 提示 -->
-      <w-dialog
-        v-model="tipShow"
-        :width="250">
-        <p>{{ tip }}</p>
+    <!-- 提示 -->
+    <w-dialog
+      v-model="tipShow"
+      :width="250">
+      <p>{{ tip }}</p>
 
-        <template #actions>
-          <div class="spacer" />
-          <w-button @click="tipShow = false"
-                    bg-color="info"
-                    dark
-                    lg>
-            {{ $t('default.know') }}
-          </w-button>
-        </template>
-      </w-dialog>
+      <template #actions>
+        <div class="spacer" />
+        <w-button @click="tipShow = false"
+                  bg-color="info"
+                  dark
+                  lg>
+          {{ $t('default.know') }}
+        </w-button>
+      </template>
     </w-dialog>
   </div>
 </template>

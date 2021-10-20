@@ -22,8 +22,14 @@
 
       <template #actions>
         <div class="spacer"></div>
-        <w-button v-if="selfBuilding && selfBuilding.count > 1"
-                  bg-color="error" class="mr2">招聘</w-button>
+        <w-button v-if="workStatus == 1"
+                  @click="publishJobShow = true"
+                  bg-color="error"
+                  class="mr2">{{ $t('building.publishJob') }}</w-button>
+        <w-button v-else-if="workStatus == 2"
+                  @click="endJobShow = true"
+                  bg-color="error"
+                  class="mr2">{{ $t('building.endJob') }}</w-button>
         <w-button bg-color="warning"
                   class="mr2"
                   v-if="buildButtonShow"
@@ -32,11 +38,12 @@
       </template>
     </w-card>
 
+    <!-- 垦荒 -->
     <w-dialog
-      v-model="buildShow"
-      :title="$t('building.build')"
-      persistent
-      :width="320">
+        v-model="buildShow"
+        :title="$t('building.build')"
+        persistent
+        :width="320">
       <p style="text-align: left; color: #7b828c">{{ $t('building.buildTip') }}<br /><br /></p>
       <w-input :label="$t('default.hour')"
                type="number"
@@ -45,14 +52,65 @@
       <template #actions>
         <div class="spacer" />
         <w-button
-          class="mr2"
-          @click="buildSubmit"
-          bg-color="error">
+            class="mr2"
+            @click="buildSubmit"
+            bg-color="error">
           {{ $t('default.sure') }}
         </w-button>
         <w-button
-          @click="buildShow = false"
-          bg-color="success">
+            @click="buildShow = false"
+            bg-color="success">
+          {{ $t('default.cancel') }}
+        </w-button>
+      </template>
+    </w-dialog>
+
+    <!-- 开始工作 -->
+    <w-dialog
+        v-model="publishJobShow"
+        :title="$t('building.publishJob')"
+        persistent
+        :width="320">
+      <p style="text-align: left; color: #7b828c">{{ $t('building.publishJobTip') }}<br /><br /></p>
+      <w-input :label="$t('goodsName.copperCoin')"
+               type="number"
+               v-model="pay"></w-input>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button
+            class="mr2"
+            @click="publishJob"
+            bg-color="error">
+          {{ $t('default.sure') }}
+        </w-button>
+        <w-button
+            @click="publishJobShow = false"
+            bg-color="success">
+          {{ $t('default.cancel') }}
+        </w-button>
+      </template>
+    </w-dialog>
+
+    <!-- 终止工作 -->
+    <w-dialog
+        v-model="endJobShow"
+        :title="$t('building.endJob')"
+        persistent
+        :width="320">
+      <p style="text-align: left; color: #2c3e50">{{ $t('building.endJobTip') }}</p>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button
+            class="mr2"
+            @click="endJob"
+            bg-color="error">
+          {{ $t('default.sure') }}
+        </w-button>
+        <w-button
+            @click="endJobShow = false"
+            bg-color="success">
           {{ $t('default.cancel') }}
         </w-button>
       </template>
@@ -82,15 +140,22 @@ export default {
   name: 'Building',
   props: {
     index: Number, // 建筑索引
+    self: Object, // 我的建筑
   },
   data() {
     return {
       process: '待开垦',
       count: 0,
+      workStatusUpdated: false,
+      workStatus: 0,
+      pay: 0,
+      name: '',
       goods1: {
         name: '',
         product: 0,
       },
+      endJobShow: false,
+      publishJobShow: false,
       buildButtonShow: true,
       buildShow: false,
       hour: 1,
@@ -111,20 +176,26 @@ export default {
         number1: 0,
       };
     },
-    selfBuilding() {
-      for (let i = 0; i < this.$store.state.building.length; i += 1) {
-        if (this.$store.state.building[i].index === this.index - 1) {
-          return this.$store.state.building[i];
+  },
+  beforeUpdate() {
+    if (this.self) {
+      this.count = this.self.count;
+      this.process = (this.self.land_has * 100) / this.self.land_occupy;
+      this.process += '%';
+
+      if (!this.workStatusUpdated) {
+        if (this.self.count > 1 || (this.self.count === 1 && this.process > 1)) {
+          if (this.self.has_work === 0) {
+            this.workStatus = 1;
+          } else if (this.self.has_work === 1) {
+            this.workStatus = 0;
+          } else if (this.self.has_work === 2) {
+            this.workStatus = 2;
+          }
+        } else {
+          this.workStatus = 0;
         }
       }
-      return null;
-    },
-  },
-  mounted() {
-    if (this.selfBuilding) {
-      this.count = this.selfBuilding.count;
-      this.process = this.selfBuilding.land_occupy / (this.selfBuilding.land_has * 100);
-      this.process += '%';
     }
     this.goods1.name = (this.building.product1 === 0) ? 'DIY'
       : this.$store.state.config.goods[this.building.product1 - 1].name;
@@ -136,6 +207,41 @@ export default {
     }
   },
   methods: {
+    publishJob() {
+      if (this.pay < 1) {
+        this.tip = this.$t('building.payIsInt');
+        this.tipShow = true;
+        return false;
+      }
+
+      this.$http.post('city/job-notice', {
+        id: this.self.id,
+        pay: this.pay,
+      }).then(() => {
+        this.workStatus = 2;
+        this.publishJobShow = false;
+        this.workStatusUpdated = true;
+      }).catch((error) => {
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
+      });
+
+      return true;
+    },
+    endJob() {
+      this.$http.delete(`city/job-notice?id=${this.self.id}&type=1`)
+        .then(() => {
+          this.workStatus = 1;
+          this.endJobShow = false;
+          this.workStatusUpdated = true;
+        })
+        .catch((error) => {
+          this.tip = this.$t(`error.${error.response.data.message}`);
+          this.tipShow = true;
+        });
+
+      return true;
+    },
     buildSubmit() {
       if (this.work) {
         this.tip = this.$t('error.work201');
@@ -154,8 +260,8 @@ export default {
         index: this.index,
         hour: this.hour,
       }).then((response) => {
-        console.info(response);
         this.$store.commit('setWork', response.data);
+        this.$store.commit('consumeUserEnergy', 400);
         this.buildButtonShow = false;
       }).catch((error) => {
         this.tip = this.$t(`error.${error.response.data.message}`);

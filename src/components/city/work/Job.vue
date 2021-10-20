@@ -2,21 +2,11 @@
   <w-card shadow class="box">
     <w-flex justify-space-between class="blue-light5--bg pa1">
       <div class="line">
-        <p style="font-size: medium">{{ $t('jobName.' + work.job) }}</p>
-        <p>{{ $t('work.nowWork', { money: work.profit, min: lessTime }) }}</p>
+        <p>{{ $t('jobName.' + job) }}</p>
       </div>
       <div class="line">
-        <p>{{ building.name }}</p>
-        <p>({{ $t('building.count', { count: count }) }} / {{ process }})</p>
-      </div>
-    </w-flex>
-
-    <w-flex justify-space-between class="blue-light5--bg pa1">
-      <div class="line">
-        <p>{{ $t('building.productShow', { number: goods1.product, name: goods1.name }) }}</p>
-      </div>
-      <div class="line">
-        <p>{{ $t('building.energyShow', { energy: building.energy }) }}</p>
+        <p>{{ $t('work.energyShow', { energy: building.energy }) }}</p>
+        <p>{{ $t('work.profitShow', { number: profit }) }}</p>
       </div>
     </w-flex>
 
@@ -35,7 +25,28 @@
 
 <script>
 export default {
-  name: 'Work'
+  name: 'Job',
+  props: {
+    id: Number,
+    boss_id: Number,
+    building_id: Number,
+    amount: Number,
+    job: Number,
+    product: Number,
+    pay: Number,
+    profit: Number,
+  },
+  computed: {
+    building() {
+      return this.$store.state.config.building[this.job - 1] ?? {
+        name: '',
+        icon: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
+        energy: 0,
+        product1: 1,
+        number1: 0,
+      };
+    },
+  },
 };
 </script>
 

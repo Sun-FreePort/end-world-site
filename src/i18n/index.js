@@ -8,6 +8,11 @@ const messages = {
     },
     building: {
       build: '开垦',
+      publishJob: '招聘',
+      payIsInt: '薪资范围是大于 0 的整数',
+      publishJobTip: '请输入您为每个工时支付的薪资（税前）',
+      endJob: '终止招聘',
+      endJobTip: '再次确认：您真的要终止招聘吗？',
       buildTip: '注意：400 体力/工时',
       energyShow: '体力：-{energy}/h',
       productShow: '收益：{name} {number}/h',
@@ -150,6 +155,8 @@ const messages = {
     ],
     work: {
       hourIsInt: '工作时间范围是 1~16 个小时的整数',
+      needWork: '快去找份工作吧！',
+      onlyMe: '我发布的',
       start: '开始工作',
       end: '结束工作',
       detail: '详细信息',

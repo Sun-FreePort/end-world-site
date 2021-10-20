@@ -2,7 +2,8 @@
   <w-flex column justify-center class="wrapper background">
     <Building v-for="item in building"
               :key="item.id"
-              :index="item.id"/>
+              :index="item.id"
+              :self="selfBuilding(item.id)"/>
   </w-flex>
 </template>
 
@@ -31,6 +32,16 @@ export default {
       .catch((err) => {
         console.error(err);
       });
+  },
+  methods: {
+    selfBuilding(index) {
+      for (let i = 0; i < this.$store.state.building.length; i += 1) {
+        if (this.$store.state.building[i].index === index) {
+          return this.$store.state.building[i];
+        }
+      }
+      return null;
+    },
   },
 };
 </script>

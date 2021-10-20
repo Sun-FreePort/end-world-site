@@ -24,7 +24,10 @@
         <div class="spacer"></div>
         <w-button v-if="selfBuilding && selfBuilding.count > 1"
                   bg-color="error" class="mr2">招聘</w-button>
-        <w-button bg-color="warning" class="mr2" @click="buildShow = true">开垦</w-button>
+        <w-button bg-color="warning"
+                  class="mr2"
+                  v-if="buildButtonShow"
+                  @click="buildShow = true">{{ $t('building.build') }}</w-button>
         <w-button bg-color="success">详情</w-button>
       </template>
     </w-card>
@@ -34,6 +37,7 @@
       :title="$t('building.build')"
       persistent
       :width="320">
+      <p style="text-align: left; color: #7b828c">{{ $t('building.buildTip') }}<br /><br /></p>
       <w-input :label="$t('default.hour')"
                type="number"
                v-model="hour"></w-input>
@@ -87,6 +91,7 @@ export default {
         name: '',
         product: 0,
       },
+      buildButtonShow: true,
       buildShow: false,
       hour: 1,
       tipShow: false,
@@ -94,6 +99,9 @@ export default {
     };
   },
   computed: {
+    work() {
+      return this.$store.state.work;
+    },
     building() {
       return this.$store.state.config.building[this.index - 1] ?? {
         name: '',
@@ -120,12 +128,16 @@ export default {
     }
     this.goods1.name = (this.building.product1 === 0) ? 'DIY'
       : this.$store.state.config.goods[this.building.product1 - 1].name;
-    this.goods1.name = this.$t(`goods.${this.goods1.name}`);
+    this.goods1.name = this.$t(`goodsName.${this.goods1.name}`);
     this.goods1.product = (this.building.product1 === 0) ? '?' : this.getProduct(this.index, this.building.number1);
+
+    if (this.work && this.work.job === this.index) {
+      this.buildButtonShow = false;
+    }
   },
   methods: {
     buildSubmit() {
-      if (this.$store.state.work) {
+      if (this.work) {
         this.tip = this.$t('error.work201');
         this.tipShow = true;
         return false;
@@ -143,6 +155,8 @@ export default {
         hour: this.hour,
       }).then((response) => {
         console.info(response);
+        this.$store.commit('setWork', response.data);
+        this.buildButtonShow = false;
       }).catch((error) => {
         this.tip = this.$t(`error.${error.response.data.message}`);
         this.tipShow = true;

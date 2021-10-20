@@ -1,17 +1,16 @@
 <template>
   <div>
-    <p>work</p>
-    <Job />
+    <NowWork />
   </div>
 </template>
 
 <script>
-import Job from '@/components/city/store/Goods.vue';
+import NowWork from '@/components/city/work/NowWork.vue';
 
 export default {
   name: 'Work',
   components: {
-    Job,
+    NowWork,
   },
   data() {
     return {

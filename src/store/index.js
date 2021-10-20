@@ -39,6 +39,10 @@ export default createStore({
       goods: [],
     },
   },
+  getters: {
+    tsNow: () => Math.ceil(new Date().getTime() / 1000),
+    tsToday: () => Math.ceil(new Date(new Date().toLocaleDateString()).getTime() / 1000),
+  },
   mutations: {
     // 读取本地缓存状态
     reloadLocalStorage(state) {
@@ -94,6 +98,7 @@ export default createStore({
     clearUser(state) {
       state.user.id = 0;
       state.user.token = '';
+      localStorage.setItem('stateUser', '');
     },
     // 刷新用户缓存
     refreshUser(state, playload) {
@@ -109,6 +114,7 @@ export default createStore({
     // 设置用户
     setWork(state, work) {
       state.work = work;
+      localStorage.setItem('stateWork', JSON.stringify(work));
     },
     setBuilding(state, building) {
       state.building = building;

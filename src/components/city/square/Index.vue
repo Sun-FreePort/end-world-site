@@ -90,23 +90,16 @@ export default {
       this.showTalk = false;
       this.$http.post('city/square/lecture', { talk: this.talk })
         .then((response) => {
-          switch (response.status) {
-            case 200:
-              this.count += 1;
-              this.$store.commit('consumeUserEnergy', 60);
-              this.lecture.unshift({
-                id: response.data.id,
-                like: 0,
-                dis: 0,
-                talk: this.talk,
-                name: this.user.name,
-                avatar: this.user.avatar,
-              });
-              break;
-            default:
-              this.tip = this.$t(`error.square${response.status}`);
-              this.show = true;
-          }
+          this.count += 1;
+          this.$store.commit('consumeUserEnergy', 60);
+          this.lecture.unshift({
+            id: response.data.id,
+            like: 0,
+            dis: 0,
+            talk: this.talk,
+            name: this.user.name,
+            avatar: this.user.avatar,
+          });
         })
         .catch((err) => {
           this.tip = this.$t(`error.${err.response.data}`);

@@ -2,13 +2,29 @@ import { createI18n } from 'vue-i18n';
 
 const messages = {
   en: {
-    time: {
-      cockcrow: '清晨', // 5~7
-      forenoon: '上午', // 7~12
-      noon: '中午', // 12~13
-      afternoon: '下午', // 13~17
-      nightfall: '黄昏', // 17~19
-      night: '夜晚', // 19~5
+    about: {
+      title: 'About',
+      content: '我们是一个松散的开发小团队，偶尔赚点广告费补贴家用哈哈，欢迎来玩我们的游戏。',
+    },
+    building: {
+      build: '开垦',
+      buildTip: '注意：400 体力/工时',
+      energyShow: '体力：-{energy}/h',
+      productShow: '收益：{name} {number}/h',
+      count: '{count} 座',
+    },
+    buildingName: {
+
+    },
+    city: {
+      square: '广 场',
+      market: '市 集',
+      store: '仓 库',
+      work: '工 作',
+      building: '不 动 产',
+      outskirts: '郊 外',
+      squareTalk: '请输入您的演讲内容',
+      talk: '我 要 演 讲',
     },
     default: {
       en: 'English',
@@ -31,63 +47,6 @@ const messages = {
         required: 'This field is required',
         need_email: '请输入一个有效的电子邮箱',
       },
-    },
-    user: {
-      title: 'User',
-      newActor: 'New actor',
-      name: 'Nickname',
-      level: '{level}级',
-      email: 'Email',
-      password: 'Password',
-      password_new: 'New Password',
-      password_confirmation: 'Password(confirm)',
-      login: 'Login',
-      gotoRegister: 'Goto Register',
-      register: 'Register',
-      gotoLogin: 'Goto Login',
-      forget_password: 'Forget Password',
-      code: 'Activate Code',
-      hp: '健康',
-      hp_max: '健康极限',
-      energy: '体力',
-      energy_max: '体力极限',
-      hungry: '饥饿',
-      hungry_max: '饥饿极限',
-      happy: '快乐',
-      happy_max: '快乐极限',
-      sign: '签到',
-    },
-    city: {
-      square: '广 场',
-      market: '市 集',
-      store: '仓 库',
-      work: '工 作',
-      building: '不 动 产',
-      outskirts: '郊 外',
-      squareTalk: '请输入您的演讲内容',
-      talk: '我 要 演 讲',
-    },
-    goods: {
-      DIY: '某物',
-      copperCoin: '铜币',
-      goldCoin: '金币',
-      berry: '浆果',
-      animalMeat: '兽肉',
-      animalTeeth: '兽牙',
-      animalSkin: '兽皮',
-      woodDagger: '木剑',
-      woodShield: '木盾',
-      log: '原木',
-      leaves: '树叶',
-    },
-    work: {
-      hourIsInt: '工作时间范围是 1~16 个小时的整数',
-    },
-    building: {
-      build: '开垦',
-      energyShow: '精力：-{energy}/h',
-      productShow: '收益：{name} {number}/h',
-      count: '{count} 座',
     },
     error: {
       adventure201: '怪物还在盯着我，这已经够麻烦了',
@@ -133,13 +92,70 @@ const messages = {
       work201: '有工作进行中，现在无法安排新工作',
       work412: '体力不足',
     },
-    about: {
-      title: 'About',
-      content: '我们是一个松散的开发小团队，偶尔赚点广告费补贴家用哈哈，欢迎来玩我们的游戏。',
+    goodsName: {
+      DIY: '某物',
+      copperCoin: '铜币',
+      goldCoin: '金币',
+      berry: '浆果',
+      animalMeat: '兽肉',
+      animalTeeth: '兽牙',
+      animalSkin: '兽皮',
+      woodDagger: '木剑',
+      woodShield: '木盾',
+      log: '原木',
+      leaves: '树叶',
     },
     policy: {
       privacyTitle: 'Privacy Policy',
       privacyContent: '　　感谢您成为“自由小岛”开发组的用户，本站及相关所有游戏，在隐私方面遵守以下规定：\n　　1.不收集除了“邮箱、IP 及硬件特征码”以外，您的任何信息，且您的邮箱在您手动点击“接收最新资讯等邮件”提示之前，仅用于找回密码等基础服务。\n　　2.您的密码将以特定单向加密算法进行存储，我们无法查看您的密码。但并不排除被骇客以拖库、彩虹表等方式进行破解，请您务必注意密码的唯一性。\n　　3.关于您在游戏内产生的一切数据，我们将遵循基本职业道德，在非“必要情况”下，不会对您的一切数据进行查看、下载、分发等动作。“必要情况”包含且不限于：优化游戏性能、解决Bug、过于恶劣的命名等。\n　　4.游戏运行过程中可能会申请应用权限，请您知悉，我们不会默认开启您设备的权限。对这类行为，若游戏内未明确申明，则均属于第三方SDK申请的权限，基于技术原因，我们无法为第三方SDK承诺明确的隐私政策，但可为您提供软体携带的第三方SDK清单，并为您查阅第三方隐私政策提供支持服务。\n　　5.您的帐号完全归属您本人所有，我们仅提供存储服务，您可以在自由的要求包括但不限于“注销账号”、“举报恶意用户”、“更改密码”、“更改昵称”等基础服务，备注，部分服务出于客观原因，使用后具备冷却期。\n　　6.若您是未成年人，请您和您的监护人仔细阅读本隐私政策，并在征得您的监护人授权同意的前提下使用我们的服务或向我们提供个人信息。\n　　7.本游戏内不含任何充值服务，但出于开发组成员的生计考虑，提供播放激励广告等间接盈利手段。\n　　8.本条为针对1的补充：IP 及硬件特征用于特定游戏、业务的反作弊行为，我们不会对该类数据挪作他用。\n　　9.本条为针对4的补充：如您在首次授权开启权限后希望关闭权限，可在设备的设置功能中选择关闭权限，从而拒绝游戏收集相应的个人信息。',
+    },
+    time: {
+      cockcrow: '清晨', // 5~7
+      forenoon: '上午', // 7~12
+      noon: '中午', // 12~13
+      afternoon: '下午', // 13~17
+      nightfall: '黄昏', // 17~19
+      night: '夜晚', // 19~5
+    },
+    user: {
+      title: 'User',
+      newActor: 'New actor',
+      name: 'Nickname',
+      level: '{level}级',
+      email: 'Email',
+      password: 'Password',
+      password_new: 'New Password',
+      password_confirmation: 'Password(confirm)',
+      login: 'Login',
+      gotoRegister: 'Goto Register',
+      register: 'Register',
+      gotoLogin: 'Goto Login',
+      forget_password: 'Forget Password',
+      code: 'Activate Code',
+      hp: '健康',
+      hp_max: '健康极限',
+      energy: '体力',
+      energy_max: '体力极限',
+      hungry: '饥饿',
+      hungry_max: '饥饿极限',
+      happy: '快乐',
+      happy_max: '快乐极限',
+      sign: '签到',
+    },
+    jobName: [
+      '垦荒者',
+      '采果人',
+      '伐木工',
+      '不可能的工作',
+    ],
+    work: {
+      hourIsInt: '工作时间范围是 1~16 个小时的整数',
+      start: '开始工作',
+      end: '结束工作',
+      detail: '详细信息',
+      nowWork: '{money}铜币/小时，剩余{min}分钟',
+      profitShow: '收益：{number}铜币/h',
+      energyShow: '体力：-{energy}/h',
     },
   },
   cns: {

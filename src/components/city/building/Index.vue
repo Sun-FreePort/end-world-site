@@ -26,7 +26,7 @@ export default {
   mounted() {
     this.$http.get('city/building')
       .then((response) => {
-        console.info(response.data);
+        this.$store.commit('setBuilding', response.data);
       })
       .catch((err) => {
         console.error(err);

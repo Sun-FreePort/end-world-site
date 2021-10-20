@@ -61,18 +61,11 @@ export default {
         id: this.id,
         feel: val,
       })
-        .then((response) => {
-          switch (response.status) {
-            case 200:
-              if (val === 1) {
-                this.likeAdd += 1;
-              } else {
-                this.disAdd += 1;
-              }
-              break;
-            default:
-              this.tip = this.$t(`error.square${response.status}`);
-              this.show = true;
+        .then(() => {
+          if (val === 1) {
+            this.likeAdd += 1;
+          } else {
+            this.disAdd += 1;
           }
         })
         .catch((err) => {

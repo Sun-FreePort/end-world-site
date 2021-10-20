@@ -19,7 +19,7 @@ const waveUI = new WaveUI(app, {
 });
 
 const url = {
-  production: 'https://api.uiosun.com/api/',
+  production: process.env.VUE_APP_PROD_SITE,
   development: process.env.VUE_APP_DEV_SITE,
 };
 app.config.globalProperties.$http = axios.create({

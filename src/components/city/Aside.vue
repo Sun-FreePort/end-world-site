@@ -39,7 +39,7 @@
     </div>
 
     <div class="box line">
-      {{ user.name }}
+      <h3>{{ user.name }}</h3>
     </div>
     <w-flex align-center class="wrapper line">
       <div class="box">{{ $t('user.energy') }}:</div>
@@ -53,6 +53,7 @@
           label-color="teal-light5"
           color="light-blue"
           stripes>
+          {{ user.energy }}
         </w-progress>
       </div>
     </w-flex>
@@ -68,6 +69,7 @@
           label-color="teal-light5"
           color="light-blue"
           stripes>
+          {{ user.hungry }}
         </w-progress>
       </div>
     </w-flex>
@@ -83,6 +85,7 @@
           label-color="teal-light5"
           color="light-blue"
           stripes>
+          {{ user.hp }}
         </w-progress>
       </div>
     </w-flex>
@@ -98,8 +101,18 @@
           label-color="teal-light5"
           color="light-blue"
           stripes>
+          {{ user.happy }}
         </w-progress>
       </div>
+    </w-flex>
+    <w-flex column justify-center class="wrapper line">
+      <p class="box">
+        <img :src="goldCoin" width="16" :alt="name">
+        {{ $t('user.gold', { number: user.gold }) }}
+        <br>
+        <img :src="copperCoin" width="16" :alt="name">
+        {{ $t('user.money', { number: user.money }) }}
+      </p>
     </w-flex>
 
     <div class="box line" v-if="signShow">
@@ -143,6 +156,14 @@ export default {
     user() {
       return this.$store.state.user;
     },
+    goldCoin() {
+      if (!this.$store.state.config.goods.length) return '';
+      return this.$store.state.config.goods[1].icon;
+    },
+    copperCoin() {
+      if (!this.$store.state.config.goods.length) return '';
+      return this.$store.state.config.goods[0].icon;
+    },
     happy() {
       return ((this.user.happy / this.user.happy_max) * 100);
     },
@@ -167,6 +188,9 @@ export default {
       this.$http.get('activity/sign').then((response) => {
         switch (response.status) {
           case 200:
+            this.tip = this.$t('user.signTip', { number: response.data });
+            this.tipShow = true;
+            this.$store.commit('consumeUserMoney', response.data);
             break;
           default:
             this.tip = this.$t(`error.${response.data.message}`);

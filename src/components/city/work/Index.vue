@@ -11,16 +11,20 @@
           :label="$t('work.onlyMe')">
         </w-switch>
       </div>
-      <Job v-for="item in jobs"
-               :key="item.id"
-               :id="item.id"
-               :boss_id="item.boss_id"
-               :building_id="item.building_id"
-               :amount="item.amount"
-               :job="item.job"
-               :product="item.product"
-               :pay="item.pay"
-               :profit="item.profit"/>
+      <div v-if="jobsCount !== 0">
+        <Job v-for="item in jobs"
+             :key="item.id"
+             :id="item.id"
+             :boss_id="item.boss_id"
+             :building_id="item.building_id"
+             :amount="item.amount"
+             :job="item.job"
+             :product="item.product"
+             :profit="item.profit"/>
+      </div>
+      <div v-else class="mb-8 pa3 blue-grey-dark2">
+        {{ $t('work.zeroJob') }}
+      </div>
     </w-flex>
   </w-flex>
 </template>
@@ -51,7 +55,6 @@ export default {
   mounted() {
     this.$http.get(`work/list?page=${this.page}&number=${this.number}`)
       .then((response) => {
-        console.info(response.data);
         this.jobs = response.data.data;
         this.jobsCount = response.data.count;
       })

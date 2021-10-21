@@ -144,7 +144,7 @@ export default {
   },
   data() {
     return {
-      process: '待开垦',
+      process: this.$t('building.progressNone'),
       count: 0,
       workStatusUpdated: false,
       workStatus: 0,
@@ -180,8 +180,13 @@ export default {
   beforeUpdate() {
     if (this.self) {
       this.count = this.self.count;
-      this.process = (this.self.land_has * 100) / this.self.land_occupy;
-      this.process += '%';
+      if (this.self.land_has === this.self.land_occupy * 100) {
+        this.process = this.$t('building.progressDone');
+      } else {
+        const landUnit = (this.self.land_occupy / this.count) * 100;
+        const progress = ((this.self.land_has / landUnit) * 100) % 100;
+        this.process = this.$t('building.progress', { number: progress });
+      }
 
       if (!this.workStatusUpdated) {
         if (this.self.count > 1 || (this.self.count === 1 && this.process > 1)) {
@@ -261,7 +266,7 @@ export default {
         hour: this.hour,
       }).then((response) => {
         this.$store.commit('setWork', response.data);
-        this.$store.commit('consumeUserEnergy', 400);
+        this.$store.commit('consumeUserEnergy', 400 * this.hour);
         this.buildButtonShow = false;
       }).catch((error) => {
         this.tip = this.$t(`error.${error.response.data.message}`);

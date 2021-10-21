@@ -124,6 +124,11 @@ export default createStore({
       state.user.energy -= val;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
+    // 更新用户铜币
+    consumeUserMoney(state, val) {
+      state.user.money -= val;
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
   },
   actions: {
   },

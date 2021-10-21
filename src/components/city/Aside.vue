@@ -179,7 +179,10 @@ export default {
   },
   mounted() {
     const signTime = localStorage.getItem('signTime');
-    if (!signTime || signTime < new Date(new Date().toLocaleDateString()).getTime()) {
+    if (signTime && signTime > 1630000000000) { // FIXME 2021年11月 清理
+      this.signShow = true;
+    }
+    if (!signTime || signTime < this.$store.getters.tsToday) {
       this.signShow = true;
     }
   },
@@ -190,14 +193,14 @@ export default {
           case 200:
             this.tip = this.$t('user.signTip', { number: response.data });
             this.tipShow = true;
-            this.$store.commit('consumeUserMoney', -response.data);
+            this.$store.commit('changeUserMoney', response.data);
             break;
           default:
             this.tip = this.$t(`error.${response.data.message}`);
             this.tipShow = true;
             break;
         }
-        localStorage.setItem('signTime', new Date(new Date().toLocaleDateString()).getTime());
+        localStorage.setItem('signTime', this.$store.getters.tsToday);
         this.signShow = false;
       }).catch((error) => {
         this.tip = this.$t(`error.${error.response.data.message}`);

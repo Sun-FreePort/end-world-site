@@ -76,7 +76,7 @@ export default {
       }).then((response) => {
         console.info(response);
         this.$store.commit('setUser', response.data.player);
-        this.$router.push('/home');
+        this.$router.push('/home/square');
       }).catch((error) => {
         this.errorMessage = this.$t(`error.${error.response.data.message}`);
         this.alertShow = true;

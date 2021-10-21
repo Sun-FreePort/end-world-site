@@ -147,6 +147,7 @@ export default {
       process: this.$t('building.progressNone'),
       count: 0,
       workStatusUpdated: false,
+      processStatusUpdated: false,
       workStatus: 0,
       pay: 0,
       name: '',
@@ -179,17 +180,21 @@ export default {
   },
   beforeUpdate() {
     if (this.self) {
+      let buildingDone = false;
       this.count = this.self.count;
-      if (this.self.land_has === this.self.land_occupy * 100) {
-        this.process = this.$t('building.progressDone');
-      } else {
-        const landUnit = (this.self.land_occupy / this.count) * 100;
-        const progress = ((this.self.land_has / landUnit) * 100) % 100;
-        this.process = this.$t('building.progress', { number: progress });
+      if (!this.processStatusUpdated) {
+        if (this.self.land_has === this.self.land_occupy * 100) {
+          this.process = this.$t('building.progressDone');
+          buildingDone = true;
+        } else {
+          const landUnit = (this.self.land_occupy / this.count) * 100;
+          const progress = ((this.self.land_has / landUnit) * 100) % 100;
+          this.process = this.$t('building.progress', { number: progress });
+        }
       }
 
       if (!this.workStatusUpdated) {
-        if (this.self.count > 1 || (this.self.count === 1 && this.process > 1)) {
+        if (this.self.count > 1 || buildingDone || (this.self.count === 1 && this.process > 1)) {
           if (this.self.has_work === 0) {
             this.workStatus = 1;
           } else if (this.self.has_work === 1) {
@@ -266,7 +271,11 @@ export default {
         hour: this.hour,
       }).then((response) => {
         this.$store.commit('setWork', response.data);
-        this.$store.commit('consumeUserEnergy', 400 * this.hour);
+        this.$store.commit('changeUserEnergy', -400 * this.hour);
+        const landUnit = (this.self.land_occupy / this.count) * 100;
+        const progress = ((this.self.land_has / landUnit) * 100) % 100;
+        this.process = this.$t('building.progress', { number: progress });
+        this.processStatusUpdated = true;
         this.buildButtonShow = false;
       }).catch((error) => {
         this.tip = this.$t(`error.${error.response.data.message}`);

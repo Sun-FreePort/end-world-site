@@ -62,9 +62,8 @@ export default {
         console.error(err);
       });
 
-    const time = new Date(new Date().toLocaleDateString()).getTime();
     if (this.$store.state.work
-      && this.$store.state.work.end_at < time / 1000) {
+      && this.$store.state.work.end_at < this.$store.getters.tsToday) {
       this.$http.get('user/work')
         .then((response) => {
           console.info(response.data);

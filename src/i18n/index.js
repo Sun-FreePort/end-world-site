@@ -37,6 +37,7 @@ const messages = {
     default: {
       en: 'English',
       cns: 'Chinese (Simple)',
+      number: '个数',
       year: '年',
       day: '天',
       hour: '小时',
@@ -100,6 +101,11 @@ const messages = {
       work201: '有工作进行中，现在无法安排新工作',
       work412: '体力不足',
       refreshWork500: '工作无法结算，这是一种非临时故障，请反馈',
+    },
+    goods: {
+      useLimit: '数量范围为 1~{number}',
+      consume: '使用',
+      consumeTip: '消耗物品使其生效，请问这次要用多少：',
     },
     goodsName: {
       DIY: '某物',
@@ -165,7 +171,7 @@ const messages = {
       needWork: '快去找份工作吧！',
       onlyMe: '我发布的',
       start: '应 聘',
-      end: '结束工作',
+      end: '终止工作',
       detail: '详细信息',
       nowWork: '{money}铜币/小时，剩余{min}分钟',
       zeroJob: '本地暂无工作岗位',

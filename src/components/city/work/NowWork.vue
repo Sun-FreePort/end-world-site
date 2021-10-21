@@ -118,7 +118,13 @@ export default {
       const timeDone = timeAll - (this.$store.state.work.end_at - this.$store.getters.tsNow);
       this.progress = (timeDone / timeAll) * 100;
 
+      if (this.progress > 100) {
+        this.$store.commit('setWork', null);
+        return false;
+      }
+
       setTimeout(this.refreshProgress, 10000);
+      return true;
     },
   },
 };

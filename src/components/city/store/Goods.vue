@@ -1,7 +1,51 @@
 <template>
-  <div class="box">
+  <div class="box" @click="useOrConsume">
     <img :src="iconBase64" width="64" :alt="name">
-    <p class="count">{{ count }}</p>
+    <p class="count">{{ countNow }}</p>
+
+    <!-- 消耗 -->
+    <w-dialog
+      v-model="useShow"
+      :title="$t('goods.consume')"
+      persistent
+      :width="320">
+      <p style="text-align: left; color: #7b828c">{{ $t('goods.consumeTip') }}<br /><br /></p>
+      <w-input :label="$t('default.number')"
+               type="number"
+               v-model="number"></w-input>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button
+          class="mr2"
+          @click="consumeSubmit"
+          bg-color="error">
+          {{ $t('default.sure') }}
+        </w-button>
+        <w-button
+          @click="useShow = false"
+          bg-color="success">
+          {{ $t('default.cancel') }}
+        </w-button>
+      </template>
+    </w-dialog>
+
+    <!-- 提示 -->
+    <w-dialog
+      v-model="tipShow"
+      :width="250">
+      <p>{{ tip }}</p>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button @click="tipShow = false"
+                  bg-color="info"
+                  dark
+                  lg>
+          {{ $t('default.know') }}
+        </w-button>
+      </template>
+    </w-dialog>
   </div>
 </template>
 
@@ -16,7 +60,12 @@ export default {
   data() {
     return {
       name: 0,
+      number: 1,
+      countAdd: 0,
       iconBase64: '',
+      useShow: false,
+      tipShow: false,
+      tip: '',
     };
   },
   computed: {
@@ -26,11 +75,77 @@ export default {
         icon: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
       };
     },
+    countNow() {
+      return this.count + this.countAdd;
+    },
   },
   mounted() {
-    // TODO i18 name
-    this.name = this.goods.name;
+    this.name = this.$t(`goodsName.${this.goods.name}`);
     this.iconBase64 = this.goods.icon;
+  },
+  methods: {
+    useOrConsume() {
+      console.info(123);
+      this.useShow = true;
+    },
+    consumeSubmit() {
+      if (this.number < 0 || this.number > this.countNow) {
+        this.tip = this.$t('goods.useLimit', { number: this.countNow });
+        this.tipShow = true;
+        return false;
+      }
+
+      this.useShow = false;
+      this.$http.post('user/consume', {
+        index: this.index,
+        number: this.number,
+      }).then((response) => {
+        this.countAdd -= response.data;
+
+        Object.keys(this.goods.effect).map((key) => {
+          const val = this.goods.effect[key];
+          switch (key) {
+            case 'hp-p':
+              this.$store.commit('changeUserHp', val * response.data);
+              break;
+            case 'hungry-p':
+              this.$store.commit('changeUserHungry', val * response.data);
+              break;
+            case 'att-a':
+              // $user['attack_max'] += val * response.data;
+              break;
+            case 'att-i':
+              // $user['attack_min'] += val * response.data;
+              break;
+            case 'def':
+              // $user['nimble'] += val * response.data;
+              break;
+            case 'money':
+              this.$store.commit('changeUserMoney', val * response.data);
+              break;
+            case 'gold':
+              this.$store.commit('changeUserGold', val * response.data);
+              break;
+            default:
+              console.error(`${key} is new effect in goods config`);
+              break;
+          }
+          return true;
+        });
+
+        if (this.countNow <= 0) {
+          this.$destroy();
+          this.$el.parentNode.removeChild(this.$el);
+        }
+        return true;
+      }).catch((error) => {
+        console.info(error);
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
+      });
+
+      return true;
+    },
   },
 };
 </script>

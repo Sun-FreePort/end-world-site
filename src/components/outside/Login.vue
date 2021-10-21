@@ -83,7 +83,7 @@ export default {
       if (this.isNew) params.name = this.name;
       this.$http.post('login', params).then((response) => {
         this.$store.commit('setUser', response.data.player);
-        this.$router.push('/home');
+        this.$router.push('/home/square');
       }).catch((error) => {
         this.errorMessage = this.$t(`error.${error.response.data.message}`);
         this.alertShow = true;

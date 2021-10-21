@@ -132,7 +132,7 @@ export default {
         hour: this.hour,
       }).then((response) => {
         this.$store.commit('setWork', response.data);
-        this.$store.commit('consumeUserEnergy', this.building.energy * this.hour);
+        this.$store.commit('changeUserEnergy', -this.building.energy * this.hour);
         this.amountAdd -= 1;
       }).catch((error) => {
         this.tip = this.$t(`error.${error.response.data.message}`);

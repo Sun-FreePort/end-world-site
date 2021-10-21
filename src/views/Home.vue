@@ -64,7 +64,7 @@ export default {
 
     // 每日首次登录时，获取服务器最新用户信息
     const time = localStorage.getItem('upgradeTime');
-    if (!time || time < new Date(new Date().toLocaleDateString()).getTime() / 1000) {
+    if (!time || time < this.$store.getters.tsToday) {
       this.$http.get('user/info')
         .then((response) => {
           this.$store.commit('refreshUser', {
@@ -73,7 +73,7 @@ export default {
             work: response.data.work,
             city: response.data.city,
           });
-          localStorage.setItem('upgradeTime', new Date(new Date().toLocaleDateString()).getTime() / 1000);
+          localStorage.setItem('upgradeTime', this.$store.getters.tsToday);
         })
         .catch((err) => {
           console.error(err);

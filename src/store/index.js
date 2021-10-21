@@ -31,7 +31,7 @@ export default createStore({
       weapon_id: 0,
     },
     building: [],
-    work: {},
+    work: null,
     city: {},
     config: {
       building: [],
@@ -77,6 +77,11 @@ export default createStore({
       if (work) {
         state.work = JSON.parse(work);
       }
+
+      const building = localStorage.getItem('stateBuilding');
+      if (building) {
+        state.building = JSON.parse(building);
+      }
     },
     // 更新用户状态
     setUser(state, loginData) {
@@ -110,23 +115,50 @@ export default createStore({
       localStorage.setItem('stateUser', JSON.stringify(state.user));
       localStorage.setItem('stateCity', JSON.stringify(playload.city));
       localStorage.setItem('stateWork', JSON.stringify(playload.work));
+      localStorage.setItem('stateBuilding', JSON.stringify(playload.building));
     },
     // 设置用户
     setWork(state, work) {
       state.work = work;
       localStorage.setItem('stateWork', JSON.stringify(work));
     },
+    // 设置建筑缓存
     setBuilding(state, building) {
       state.building = building;
+      localStorage.setItem('stateBuilding', JSON.stringify(building));
     },
-    // 消耗用户体力
-    consumeUserEnergy(state, val) {
-      state.user.energy -= val;
+    // 改变用户饥饿
+    changeUserHungry(state, val) {
+      state.user.hungry += val;
+      if (state.user.hungry > state.user.hungry_max) {
+        state.user.hungry = state.user.hungry_max;
+      }
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 改变用户体力
+    changeUserEnergy(state, val) {
+      state.user.energy += val;
+      if (state.user.energy > state.user.energy_max) {
+        state.user.energy = state.user.energy_max;
+      }
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 改变用户生命
+    changeUserHp(state, val) {
+      state.user.hp += val;
+      if (state.user.hp > state.user.hp_max) {
+        state.user.hp = state.user.hp_max;
+      }
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
     // 更新用户铜币
-    consumeUserMoney(state, val) {
-      state.user.money -= val;
+    changeUserMoney(state, val) {
+      state.user.money += val;
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 更新用户金币
+    changeUserGold(state, val) {
+      state.user.gold += val;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
   },

@@ -190,7 +190,7 @@ export default {
           case 200:
             this.tip = this.$t('user.signTip', { number: response.data });
             this.tipShow = true;
-            this.$store.commit('consumeUserMoney', response.data);
+            this.$store.commit('consumeUserMoney', -response.data);
             break;
           default:
             this.tip = this.$t(`error.${response.data.message}`);

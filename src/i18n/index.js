@@ -96,6 +96,7 @@ const messages = {
       userServer500: '用户服务器无法连接，请稍后再试',
       work201: '有工作进行中，现在无法安排新工作',
       work412: '体力不足',
+      refreshWork500: '工作无法结算，这是一种非临时故障，请反馈',
     },
     goodsName: {
       DIY: '某物',

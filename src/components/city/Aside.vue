@@ -123,6 +123,14 @@
       </w-button>
     </div>
 
+    <div class="box line">
+      <w-button class="ma1 grow menu-button"
+                bg-color="error"
+                @click="logout"
+                md>{{ $t('user.logout') }}
+      </w-button>
+    </div>
+
     <!-- 提示 -->
     <w-dialog
       v-model="tipShow"
@@ -202,6 +210,16 @@ export default {
         }
         localStorage.setItem('signTime', this.$store.getters.tsToday);
         this.signShow = false;
+      }).catch((error) => {
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
+      });
+    },
+    logout() {
+      this.$http.post('logout').then(() => {
+        this.$store.commit('clearUser');
+        this.signShow = false;
+        this.$router.push('/');
       }).catch((error) => {
         this.tip = this.$t(`error.${error.response.data.message}`);
         this.tipShow = true;

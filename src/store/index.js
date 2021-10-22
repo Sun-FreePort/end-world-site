@@ -83,12 +83,6 @@ export default createStore({
         state.building = JSON.parse(building);
       }
     },
-    // 更新用户状态
-    setUser(state, loginData) {
-      state.user = loginData;
-      state.user.token = loginData.api_token;
-      localStorage.setItem('stateUser', JSON.stringify(state.user));
-    },
     // 检测版本
     setConfig(state, playload) {
       console.info('SetConfig!');
@@ -99,11 +93,21 @@ export default createStore({
       localStorage.setItem('version', playload.ver);
       localStorage.setItem('config', JSON.stringify(playload.config));
     },
+    // 更新用户状态
+    setUser(state, loginData) {
+      state.user = loginData;
+      state.user.token = loginData.api_token;
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
     // 清理用户状态
     clearUser(state) {
       state.user.id = 0;
       state.user.token = '';
-      localStorage.setItem('stateUser', '');
+      localStorage.removeItem('upgradeTime');
+      localStorage.removeItem('stateUser');
+      localStorage.removeItem('stateCity');
+      localStorage.removeItem('stateWork');
+      localStorage.removeItem('stateBuilding');
     },
     // 刷新用户缓存
     refreshUser(state, playload) {

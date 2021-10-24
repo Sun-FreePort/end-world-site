@@ -6,10 +6,14 @@
     <!-- 消耗 -->
     <w-dialog
       v-model="useShow"
-      :title="$t('goods.consume')"
+      :title="name"
       persistent
       :width="320">
-      <p style="text-align: left; color: #7b828c">{{ $t('goods.consumeTip') }}<br /><br /></p>
+      <p style="text-align: left; color: #7b828c">
+        {{ $t('goods.consumeTip') }}<br /><br />
+        {{ $t('goods.effectTitle') }}
+      </p>
+      <p v-html="effect"></p>
       <w-input :label="$t('default.number')"
                type="number"
                v-model="number"></w-input>
@@ -20,7 +24,13 @@
           class="mr2"
           @click="consumeSubmit"
           bg-color="error">
-          {{ $t('default.sure') }}
+          {{ $t('goods.consume') }}
+        </w-button>
+        <w-button
+          class="mr2"
+          @click="discardSubmit"
+          bg-color="warning">
+          {{ $t('default.discard') }}
         </w-button>
         <w-button
           @click="useShow = false"
@@ -63,6 +73,7 @@ export default {
       number: 1,
       countAdd: 0,
       iconBase64: '',
+      effect: '',
       useShow: false,
       tipShow: false,
       tip: '',
@@ -85,8 +96,48 @@ export default {
   },
   methods: {
     useOrConsume() {
-      console.info(123);
       this.useShow = true;
+      this.effect = '';
+      Object.keys(this.goods.effect).map((key) => {
+        switch (key) {
+          case 'hp-p':
+            this.effect += this.$t('goods.effectHpP', { number: this.goods.effect[key] });
+            break;
+          case 'hungry-p':
+            this.effect += this.$t('goods.effectHungryP', { number: this.goods.effect[key] });
+            break;
+          case 'energy-p':
+            this.effect += this.$t('goods.effectEnergyP', { number: this.goods.effect[key] });
+            break;
+          case 'happy-p':
+            this.effect += this.$t('goods.effectHappyP', { number: this.goods.effect[key] });
+            break;
+          case 'att-a':
+            this.effect += this.$t('goods.effectAttA', { number: this.goods.effect[key] });
+            break;
+          case 'att-i':
+            this.effect += this.$t('goods.effectAttI', { number: this.goods.effect[key] });
+            break;
+          case 'def':
+            this.effect += this.$t('goods.effectDef', { number: this.goods.effect[key] });
+            break;
+          case 'money':
+            this.effect += this.$t('goods.effectMoney', { number: this.goods.effect[key] });
+            break;
+          case 'gold':
+            this.effect += this.$t('goods.effectGold', { number: this.goods.effect[key] });
+            break;
+          default:
+            console.error(`${key} is new effect in goods config`);
+            break;
+        }
+        return true;
+      });
+    },
+    discardSubmit() {
+      this.tip = '本功能尚未开通';
+      // this.tip = this.$t(`error.${error.response.data.message}`);
+      this.tipShow = true;
     },
     consumeSubmit() {
       if (this.number < 0 || this.number > this.countNow) {
@@ -110,6 +161,12 @@ export default {
               break;
             case 'hungry-p':
               this.$store.commit('changeUserHungry', val * response.data);
+              break;
+            case 'energy-p':
+              this.$store.commit('changeUserEnergy', val * response.data);
+              break;
+            case 'happy-p':
+              this.$store.commit('changeUserHappy', val * response.data);
               break;
             case 'att-a':
               // $user['attack_max'] += val * response.data;
@@ -152,14 +209,14 @@ export default {
 
 <style scoped lang="scss">
 .box {
-  background-color: #001f50;
+  background-color: #fff8cd;
   border: 1px solid #55f;
   padding: 1px 4px 4px 1px;
   position: relative;
 }
 
 .count {
-  color: #ffffff;
+  color: #ff0000;
   position: absolute;
   bottom: 0;
   right: 0;

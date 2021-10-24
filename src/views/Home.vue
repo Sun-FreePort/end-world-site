@@ -62,9 +62,9 @@ export default {
         console.error(err);
       });
 
-    // 每日首次登录时，获取服务器最新用户信息
+    // 每此进入页面，如果间隔 1 小时，则获取服务器最新用户信息
     const time = localStorage.getItem('upgradeTime');
-    if (!time || time < this.$store.getters.tsToday) {
+    if (!time || Math.round(time) + 3600 < this.$store.getters.tsNow) {
       this.$http.get('user/info')
         .then((response) => {
           this.$store.commit('refreshUser', {
@@ -73,7 +73,7 @@ export default {
             work: response.data.work,
             city: response.data.city,
           });
-          localStorage.setItem('upgradeTime', this.$store.getters.tsToday);
+          localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
         })
         .catch((err) => {
           console.error(err);

@@ -1,7 +1,7 @@
 <template>
   <w-flex column align-center justify-start class="wrapper">
-    <div class="box">荒地：425</div>
-    <div class="box">居民：726</div>
+    <div class="box">荒地：{{ city.land }}</div>
+    <div class="box">居民：{{ city.human }}</div>
     <div class="box">城市等级：12 级</div>
     <div class="box">委员会：暂无</div>
     <div class="box" style="color: beige">- - - - - -</div>
@@ -41,6 +41,23 @@
         </w-button>
       </template>
     </w-dialog>
+
+    <!-- 提示 -->
+    <w-dialog
+      v-model="tipShow"
+      :width="250">
+      <p>{{ tip }}</p>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button @click="tipShow = false"
+                  bg-color="info"
+                  dark
+                  lg>
+          {{ $t('default.know') }}
+        </w-button>
+      </template>
+    </w-dialog>
   </w-flex>
 </template>
 
@@ -54,15 +71,11 @@ export default {
   },
   data() {
     return {
-      city: {
-        land: 0,
-        human: 0,
-        level: 0,
-        manage: 'null',
-      },
       lecture: [],
       showTalk: false,
       talk: '',
+      tipShow: false,
+      tip: '',
       count: 0,
       page: 1,
       number: 10,
@@ -71,6 +84,9 @@ export default {
   computed: {
     user() {
       return this.$store.state.user;
+    },
+    city() {
+      return this.$store.state.city;
     },
   },
   mounted() {
@@ -93,7 +109,7 @@ export default {
           this.count += 1;
           this.$store.commit('changeUserEnergy', -60);
           this.lecture.unshift({
-            id: response.data.id,
+            id: response.data,
             like: 0,
             dis: 0,
             talk: this.talk,
@@ -101,9 +117,9 @@ export default {
             avatar: this.user.avatar,
           });
         })
-        .catch((err) => {
-          this.tip = this.$t(`error.${err.response.data}`);
-          this.show = true;
+        .catch((error) => {
+          this.tip = this.$t(`error.${error.response.data.message}`);
+          this.tipShow = true;
         });
     },
   },

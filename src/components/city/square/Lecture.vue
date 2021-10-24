@@ -19,13 +19,13 @@
 
     <!-- 提示 -->
     <w-dialog
-      v-model="show"
+      v-model="tipShow"
       :width="250">
       <p>{{ tip }}</p>
 
       <template #actions>
         <div class="spacer" />
-        <w-button @click="show = false"
+        <w-button @click="tipShow = false"
                   bg-color="info"
                   dark
                   lg>
@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      show: false,
+      tipShow: false,
       tip: '',
       likeAdd: 0,
       disAdd: 0,
@@ -68,8 +68,9 @@ export default {
             this.disAdd += 1;
           }
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((error) => {
+          this.tip = this.$t(`error.${error.response.data.message}`);
+          this.tipShow = true;
         });
     },
   },

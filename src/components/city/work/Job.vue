@@ -16,7 +16,7 @@
       <w-button bg-color="error"
                 class="mr2"
                 @click="jobStartShow">{{ $t('work.start') }}</w-button>
-      <w-button bg-color="success">{{ $t('work.detail') }}</w-button>
+      <w-button bg-color="success">{{ $t('default.detail') }}</w-button>
     </template>
 
     <!-- 应聘 -->

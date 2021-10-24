@@ -5,7 +5,8 @@
       <div>
         <w-switch
           class="ma2"
-          :value="true"
+          v-model="onlyMe"
+          @update:model-value="workList"
           thin
           color="warning"
           :label="$t('work.onlyMe')">
@@ -26,6 +27,23 @@
         {{ $t('work.zeroJob') }}
       </div>
     </w-flex>
+
+    <!-- 提示 -->
+    <w-dialog
+      v-model="tipShow"
+      :width="250">
+      <p>{{ tip }}</p>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button @click="tipShow = false"
+                  bg-color="info"
+                  dark
+                  lg>
+          {{ $t('default.know') }}
+        </w-button>
+      </template>
+    </w-dialog>
   </w-flex>
 </template>
 
@@ -43,8 +61,11 @@ export default {
     return {
       page: 1,
       number: 10,
+      onlyMe: false,
       jobsCount: 0,
       jobs: [],
+      tipShow: false,
+      tip: '',
     };
   },
   computed: {
@@ -53,14 +74,7 @@ export default {
     },
   },
   mounted() {
-    this.$http.get(`work/list?page=${this.page}&number=${this.number}`)
-      .then((response) => {
-        this.jobs = response.data.data;
-        this.jobsCount = response.data.count;
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    this.workList();
 
     if (this.$store.state.work
       && this.$store.state.work.end_at < this.$store.getters.tsToday) {
@@ -69,10 +83,28 @@ export default {
           console.info(response.data);
           this.$store.commit('setWork', response.data);
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((error) => {
+          this.tip = this.$t(`error.${error.response.data.message}`);
+          this.tipShow = true;
         });
     }
+  },
+  methods: {
+    workList() {
+      let url = `work/list?page=${this.page}&number=${this.number}`;
+      if (this.onlyMe) {
+        url += '&self=1';
+      }
+      this.$http.get(url)
+        .then((response) => {
+          this.jobs = response.data.data;
+          this.jobsCount = response.data.count;
+        })
+        .catch((error) => {
+          this.tip = this.$t(`error.${error.response.data.message}`);
+          this.tipShow = true;
+        });
+    },
   },
 };
 </script>

@@ -27,7 +27,7 @@
       <template #actions>
         <div class="spacer"></div>
         <w-button bg-color="error" class="mr2">{{ $t('work.end') }}</w-button>
-        <w-button bg-color="warning" class="mr2">{{ $t('work.detail') }}</w-button>
+        <w-button bg-color="warning" class="mr2">{{ $t('default.detail') }}</w-button>
       </template>
     </w-card>
     <w-card shadow class="box" v-else>

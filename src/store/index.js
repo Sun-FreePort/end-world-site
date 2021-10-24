@@ -30,6 +30,7 @@ export default createStore({
       vip_at: 0,
       weapon_id: 0,
     },
+    fight: {},
     building: [],
     work: null,
     city: {},

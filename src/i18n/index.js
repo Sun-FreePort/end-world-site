@@ -22,9 +22,9 @@ const messages = {
       productShow: '收益：{number}{name}/h',
       count: '{count} 座',
       need: '{goods} x {number}',
+      detail: '　　本建筑占地 {land} 单位。<br/>　　能提供 {employee} 个工作岗位。<br/>　　每工时理论产出 {number1} 个 {product1}，根据实际情况有所差异。',
     },
     buildingName: {
-
     },
     city: {
       square: '广 场',

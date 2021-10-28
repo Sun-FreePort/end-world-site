@@ -118,13 +118,14 @@
       </template>
     </w-dialog>
 
-    <!-- 提示 -->
+    <!-- 详细信息 -->
     <w-dialog
       v-model="detailShow"
       :width="320">
       <p class="tipsText"><strong>{{ $t('building.productUse') }}</strong></p>
       <p class="tipsText">{{ cost }}</p>
-      <p class="tipsText">{{ detail }}</p>
+      <w-divider color="amber" class="ma6"></w-divider>
+      <p class="tipsText" v-html="detail"></p>
 
       <template #actions>
         <div class="spacer" />
@@ -241,8 +242,7 @@ export default {
         }
       }
     }
-    this.goods1.name = (this.building.product1 === 0) ? 'DIY'
-      : this.$store.state.config.goods[this.building.product1 - 1].name;
+    this.goods1.name = this.$store.state.config.goods[this.building.product1 - 1].name;
     this.goods1.name = this.$t(`goodsName.${this.goods1.name}`);
     this.goods1.product = (this.building.product1 === 0) ? '?' : this.getProduct(this.index, this.building.number1);
 
@@ -254,16 +254,23 @@ export default {
     showDetail() {
       const { goods } = this.$store.state.config;
       this.cost = this.$t('building.buildTip', { number: this.building.energy });
-
-      Object.keys(this.building.use).map((key) => {
-        const goodsIndex = this.building.use[key].id - 1;
-        this.cost += '、';
-        this.cost += this.$t('building.need', {
-          number: this.building.use[key].number,
-          goods: this.$t(`goodsName.${goods[goodsIndex].name}`),
-        });
-        return false;
+      this.detail = this.$t('building.detail', {
+        land: this.building.land,
+        employee: this.building.employee,
+        product1: this.goods1.name,
+        number1: this.building.number1,
       });
+
+      Object.keys(this.building.use)
+        .map((key) => {
+          const goodsIndex = this.building.use[key].id - 1;
+          this.cost += '、';
+          this.cost += this.$t('building.need', {
+            number: this.building.use[key].number,
+            goods: this.$t(`goodsName.${goods[goodsIndex].name}`),
+          });
+          return false;
+        });
       this.detailShow = true;
     },
     showBuild() {

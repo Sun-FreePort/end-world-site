@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import MD5 from 'crypto-js/md5';
 // @ is an alias to /src
 import Header from '@/components/city/Header.vue';
 import Aside from '@/components/city/Aside.vue';
@@ -43,7 +44,8 @@ export default {
     // 版本不同时，更新配置
     this.$http.get('ver')
       .then((response) => {
-        if (this.$store.state.ver >= response.data.ver) {
+        const hash = MD5(localStorage.getItem('config')).toString();
+        if (this.$store.state.ver >= response.data.ver && response.data.hash === hash) {
           return;
         }
 
@@ -62,25 +64,33 @@ export default {
         console.error(err);
       });
 
-    // 每此进入页面，如果间隔 1 小时，则获取服务器最新用户信息
-    const time = localStorage.getItem('upgradeTime');
-    if (!time || Math.round(time) + 3600 < this.$store.getters.tsNow) {
-      this.$http.get('user/info')
-        .then((response) => {
-          this.$store.commit('refreshUser', {
-            user: response.data.user,
-            building: response.data.building,
-            work: response.data.work,
-            city: response.data.city,
-          });
-          localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
+    this.userRefresh();
 
     return false;
+  },
+  methods: {
+    // 定时获取最新用户信息
+    userRefresh() {
+      const time = localStorage.getItem('upgradeTime');
+      if (!time || Math.round(time) + 360 < this.$store.getters.tsNow) {
+        localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
+        this.$http.get('user/info')
+          .then((response) => {
+            this.$store.commit('refreshUser', {
+              user: response.data.user,
+              building: response.data.building,
+              work: response.data.work,
+              city: response.data.city,
+            });
+            localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+
+      setTimeout(this.userRefresh, 29000);
+    },
   },
 };
 </script>

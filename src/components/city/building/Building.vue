@@ -33,8 +33,9 @@
         <w-button bg-color="warning"
                   class="mr2"
                   v-if="buildButtonShow"
-                  @click="buildShow = true">{{ $t('building.build') }}</w-button>
-        <w-button bg-color="success">详情</w-button>
+                  @click="showBuild">{{ $t('building.build') }}</w-button>
+        <w-button bg-color="success"
+                  @click="showDetail">{{ $t('default.detail') }}</w-button>
       </template>
     </w-card>
 
@@ -44,7 +45,8 @@
         :title="$t('building.build')"
         persistent
         :width="320">
-      <p style="text-align: left; color: #7b828c">{{ $t('building.buildTip') }}<br /><br /></p>
+      <p class="tipsText" v-html="cost"></p>
+      <br /><br />
       <w-input :label="$t('default.hour')"
                type="number"
                v-model="hour"></w-input>
@@ -71,7 +73,7 @@
         :title="$t('building.publishJob')"
         persistent
         :width="320">
-      <p style="text-align: left; color: #7b828c">{{ $t('building.publishJobTip') }}<br /><br /></p>
+      <p class="tipsText">{{ $t('building.publishJobTip') }}<br /><br /></p>
       <w-input :label="$t('goodsName.copperCoin')"
                type="number"
                v-model="pay"></w-input>
@@ -92,13 +94,13 @@
       </template>
     </w-dialog>
 
-    <!-- 终止工作 -->
+    <!-- 终止招聘 -->
     <w-dialog
         v-model="endJobShow"
         :title="$t('building.endJob')"
         persistent
         :width="320">
-      <p style="text-align: left; color: #2c3e50">{{ $t('building.endJobTip') }}</p>
+      <p class="tipsText">{{ $t('building.endJobTip') }}</p>
 
       <template #actions>
         <div class="spacer" />
@@ -112,6 +114,25 @@
             @click="endJobShow = false"
             bg-color="success">
           {{ $t('default.cancel') }}
+        </w-button>
+      </template>
+    </w-dialog>
+
+    <!-- 提示 -->
+    <w-dialog
+      v-model="detailShow"
+      :width="320">
+      <p class="tipsText"><strong>{{ $t('building.productUse') }}</strong></p>
+      <p class="tipsText">{{ cost }}</p>
+      <p class="tipsText">{{ detail }}</p>
+
+      <template #actions>
+        <div class="spacer" />
+        <w-button @click="detailShow = false"
+                  bg-color="info"
+                  dark
+                  lg>
+          {{ $t('default.know') }}
         </w-button>
       </template>
     </w-dialog>
@@ -146,6 +167,7 @@ export default {
     return {
       process: this.$t('building.progressNone'),
       count: 0,
+      cost: '',
       workStatusUpdated: false,
       processStatusUpdated: false,
       workStatus: 0,
@@ -162,6 +184,8 @@ export default {
       hour: 1,
       tipShow: false,
       tip: '',
+      detailShow: false,
+      detail: '',
     };
   },
   computed: {
@@ -177,6 +201,16 @@ export default {
         number1: 0,
       };
     },
+  },
+  mounted() {
+    this.goods1.name = (this.building.product1 === 0) ? 'DIY'
+      : this.$store.state.config.goods[this.building.product1 - 1].name;
+    this.goods1.name = this.$t(`goodsName.${this.goods1.name}`);
+    this.goods1.product = (this.building.product1 === 0) ? '?' : this.getProduct(this.index, this.building.number1);
+
+    if (this.work && this.work.job === this.index) {
+      this.buildButtonShow = false;
+    }
   },
   beforeUpdate() {
     if (this.self) {
@@ -217,6 +251,36 @@ export default {
     }
   },
   methods: {
+    showDetail() {
+      const { goods } = this.$store.state.config;
+      this.cost = this.$t('building.buildTip', { number: this.building.energy });
+
+      Object.keys(this.building.use).map((key) => {
+        const goodsIndex = this.building.use[key].id - 1;
+        this.cost += '、';
+        this.cost += this.$t('building.need', {
+          number: this.building.use[key].number,
+          goods: this.$t(`goodsName.${goods[goodsIndex].name}`),
+        });
+        return false;
+      });
+      this.detailShow = true;
+    },
+    showBuild() {
+      const { goods } = this.$store.state.config;
+      this.cost = this.$t('building.buildTip', { number: 400 });
+
+      Object.keys(this.building.cost).map((key) => {
+        const goodsIndex = this.building.cost[key].id - 1;
+        this.cost += '、';
+        this.cost += this.$t('building.need', {
+          number: this.building.cost[key].number,
+          goods: this.$t(`goodsName.${goods[goodsIndex].name}`),
+        });
+        return false;
+      });
+      this.buildShow = true;
+    },
     publishJob() {
       if (this.pay < 1) {
         this.tip = this.$t('building.payIsInt');
@@ -295,7 +359,10 @@ export default {
         case 2:
           return Math.ceil((city.water / 9500 - city.mine / 10500) * standardProduct);
         case 3:
-          return 1;
+        case 4:
+        case 5:
+        case 6:
+          return Math.ceil(standardProduct);
         default:
           console.warn('程序问题：新工作未知，无法处理');
           return 0;
@@ -320,5 +387,10 @@ export default {
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+.tipsText {
+  text-align: left;
+  color: #7b828c
 }
 </style>

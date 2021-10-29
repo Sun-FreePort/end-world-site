@@ -1,17 +1,32 @@
 <template>
   <div class="home">
     <Header id="header" :version="ver" :human="human" />
-    <img alt="Vue logo" src="../assets/logo.png">
+    <img alt="Vue logo" src="../assets/logo.png" />
 
     <div>
       <Login v-if="isLogin" />
       <Register v-else />
       <hr style="margin-top: 18px;" />
       <footer style="margin: 20px;">
-        <w-select :items="items"
-                  v-model="$i18n.locale"
-                  @item-click="selectLang"
-                  outline>{{ $t('default.' + local) }}</w-select>
+        <w-flex align-center class="wrapper">
+          <div class="footer-box">
+            <w-select :items="items"
+                      v-model="$i18n.locale"
+                      @item-click="selectLang"
+                      outline>{{ $t('default.' + local) }}</w-select>
+          </div>
+          <div class="spacer"></div>
+          <div class="footer-box">
+            <w-button
+              class="ma2"
+              @click="clearConfig"
+              bg-color="warning"
+              shadow
+              lg>
+              {{ $t('config.clear') }}
+            </w-button>
+          </div>
+        </w-flex>
       </footer>
     </div>
   </div>
@@ -59,6 +74,12 @@ export default {
     return false;
   },
   methods: {
+    // 清理缓存
+    clearConfig() {
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.reload();
+    },
     // 切换显示
     convertShow() {
       this.isLogin = !this.isLogin;

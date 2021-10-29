@@ -26,6 +26,9 @@ const messages = {
     },
     buildingName: {
     },
+    config: {
+      clear: '清理缓存',
+    },
     city: {
       square: '广 场',
       market: '市 集',
@@ -187,7 +190,9 @@ const messages = {
       '垦荒者',
       '采果人',
       '伐木工',
-      '不可能的工作',
+      '农夫(小麦)',
+      '磨坊工(小麦)',
+      '厨师(浆果丸子)',
     ],
     work: {
       hourIsInt: '工作时间范围是 1~16 个小时的整数',

@@ -33,7 +33,7 @@
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/home/outskirts')">
+                @click="() => $router.push('/outskirts')">
         {{ $t('city.outskirts') }}
       </w-button>
     </div>
@@ -54,6 +54,28 @@
           color="light-blue"
           stripes>
           {{ user.energy }}
+        </w-progress>
+      </div>
+    </w-flex>
+    <w-flex align-center class="wrapper line">
+      <div class="box">{{ $t('user.level') }}:</div>
+      <div class="spacer">
+        {{ $t('user.levelNumber', { level: user.level }) }}
+      </div>
+    </w-flex>
+    <w-flex align-center class="wrapper line">
+      <div class="box">{{ $t('user.exp') }}:</div>
+      <div class="spacer">
+        <w-progress
+          v-model="exp"
+          size="1.3em"
+          outline
+          round
+          label
+          label-color="teal-light5"
+          color="light-blue"
+          stripes>
+          {{ user.exp }}
         </w-progress>
       </div>
     </w-flex>
@@ -175,6 +197,10 @@ export default {
     happy() {
       return ((this.user.happy / this.user.happy_max) * 100);
     },
+    exp() {
+      const expMax = (1.2 ** this.user.level) * 83.4 + 50;
+      return ((this.user.exp / expMax) * 100);
+    },
     hp() {
       return ((this.user.hp / this.user.hp_max) * 100);
     },
@@ -231,7 +257,7 @@ export default {
 
 <style lang="scss" scoped>
 .line {
-  margin-top: 3px;
+  margin-top: 5px;
   width: 100%;
 }
 

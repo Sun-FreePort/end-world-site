@@ -59,7 +59,7 @@ export default {
   },
   mounted() {
     if (this.$store.state.user.token) {
-      return this.$router.push('home');
+      return this.$router.push('/home');
     }
 
     this.$http.get('ver')
@@ -87,6 +87,10 @@ export default {
     // 选择语言
     selectLang() {
       console.info(this.$i18n.locale);
+      if (this.$i18n.locale === undefined) {
+        this.$i18n.locale = localStorage.getItem('local') ?? 'en';
+        this.local = localStorage.getItem('local') ?? 'en';
+      }
       if (this.$i18n.locale !== localStorage.getItem('local')) {
         localStorage.setItem('local', this.$i18n.locale);
         this.local = this.$i18n.locale;

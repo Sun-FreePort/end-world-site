@@ -32,11 +32,12 @@ const routes = [
         path: 'store',
         component: () => import(/* webpackChunkName: "home_store" */ '../components/city/store/Index.vue'),
       },
-      {
-        path: 'outskirts',
-        component: () => import(/* webpackChunkName: "home_outskirts" */ '../components/city/square/Index.vue'),
-      },
     ],
+  },
+  {
+    path: '/outskirts',
+    name: 'Outskirts',
+    component: () => import(/* webpackChunkName: "outskirts" */ '../views/Outskirts.vue'),
   },
   {
     path: '/about',

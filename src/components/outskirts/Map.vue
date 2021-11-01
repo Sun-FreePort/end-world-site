@@ -5,7 +5,7 @@
     :fullscreen="true">
     <w-flex justify-space-between class="pa3">
       <div class="title3 title-map">
-        你能去以下地方：
+        现在位置【{{ $t('mapName.' + map.name) }}】
       </div>
       <div>
         <w-button
@@ -28,14 +28,14 @@
             tile>
       <w-flex wrap class="text-left">
         <div class="xs3">
-          <strong>{{ item.name }}</strong>
+          <strong>{{ $t('mapName.' + item.name) }}</strong>
           <br><br>
           {{ $t('outskirts.danger' + item.danger) }}
         </div>
         <div class="xs6">
           <span v-if="item.isBack" style="color: #009999">{{ $t('outskirts.homeTarget') }}</span>
           <br><br>
-          {{ item.goTo }}
+          {{ item.goto }}
         </div>
         <div class="xs3 text-right">
           <w-button
@@ -55,7 +55,7 @@
 export default {
   name: 'Map',
   props: {
-    index: Number,
+    id: Number,
   },
   data() {
     return {
@@ -63,36 +63,72 @@ export default {
     };
   },
   computed: {
-    maps() {
-      const mapsNow = [{
+    map() {
+      return {
         id: 1,
-        name: '西郊密林',
+        name: 'cityGate',
+        monsters: [],
+        danger: 1,
+        boss: 0,
+        deep: 0,
+        linked: [2],
+      };
+    },
+    maps() {
+      const maps = [{
+        id: 1,
+        name: 'cityGate',
+        monsters: [],
+        danger: 1,
+        boss: 0,
+        deep: 0,
+        linked: [2],
+      }, {
+        id: 2,
+        name: 'outskirtSpinney',
         monsters: [1, 2, 3],
         danger: 1,
         boss: 0,
         deep: 1,
-        linked: [2],
+        linked: [1, 3],
       }, {
-        id: 2,
-        name: '林中小屋',
+        id: 3,
+        name: 'cabinInWoods',
         monsters: [4, 5, 6],
         danger: 2,
         boss: 0,
         deep: 2,
-        linked: [3],
+        linked: [2, 4],
       }, {
-        id: 3,
-        name: '藏尸处',
+        id: 4,
+        name: 'corpseStore',
         monsters: [7, 8, 9],
         danger: 3,
         boss: 10,
         deep: 3,
-        linked: [],
+        linked: [3],
       }];
 
+      const mapsNow = [];
+      for (let i = 0; i < maps.length; i += 1) {
+        if (maps[i].linked.includes(this.id)) {
+          mapsNow.push(maps[i]);
+        }
+      }
+
+      console.info(mapsNow);
       let isBackDeep = 9999;
       let isBackIndex = 9999;
       for (let i = 0; i < mapsNow.length; i += 1) {
+        let linkText = '';
+        mapsNow[i].linked.map((id) => {
+          if (id !== this.id) {
+            linkText += `${this.$t(`mapName.${maps[id - 1].name}`)}、`;
+          }
+          return true;
+        });
+        mapsNow[i].goto = this.$t('outskirts.canGoto') + linkText.slice(0, -1);
+
         if (isBackDeep > mapsNow[i].deep) {
           isBackDeep = mapsNow[i].deep;
           isBackIndex = i;
@@ -100,13 +136,15 @@ export default {
       }
       // 翻译：通往大道之森、黑森林、荆棘谷地、黑暗池潭
 
-      mapsNow[isBackIndex].isBack = true;
+      if (this.id !== 1) {
+        mapsNow[isBackIndex].isBack = true;
+      }
 
       return mapsNow;
     },
   },
   mounted() {
-    if (this.index === 1) {
+    if (this.id === 1) {
       this.backHomeShow = true;
     }
   },
@@ -118,8 +156,8 @@ export default {
       this.$emit('eventname', { type: 'backHome' });
       this.closeMap();
     },
-    changeMap(index) {
-      this.$emit('eventname', { type: 'change', val: index });
+    changeMap(id) {
+      this.$emit('eventname', { type: 'change', val: id });
       this.closeMap();
     },
   },
@@ -137,7 +175,7 @@ export default {
 }
 
 .title-map {
-  line-height: 36px;
-  height: 36px;
+  line-height: 46px;
+  height: 46px;
 }
 </style>

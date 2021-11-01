@@ -175,6 +175,9 @@ const messages = {
     },
     mapName: {
       cityGate: '城门',
+      outskirtSpinney: '西郊密林',
+      cabinInWoods: '林中小屋',
+      corpseStore: '藏尸处',
     },
     policy: {
       privacyTitle: 'Privacy Policy',

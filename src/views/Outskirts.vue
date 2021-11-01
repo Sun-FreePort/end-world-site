@@ -3,15 +3,16 @@
     <Header />
   </header>
   <main style="margin: 0 10px;">
-    <Map v-if="mapShow" :index="index" @eventname="mapChange"/>
+    <Map v-if="mapShow" :id="mapIndex" @eventname="mapChange"/>
+    <Knapsack v-if="knapsackShow" @eventname="knapsackChange"/>
     <w-flex wrap class="text-center my5">
       <div class="xs6 pa1">
         <w-progress
           v-model="hpMonsterProgress"
           size="1.3em"
           round
-          color="warning-dark1"
-          label-color="info-light3"
+          color="warning"
+          label-color="warning-light3"
           label>
           {{ monster.hp }}
         </w-progress>
@@ -23,13 +24,13 @@
       </div>
       <div class="xs6 pa1">
         <w-progress
-          v-model="hpMonsterProgress"
+          v-model="hpProgress"
           size="1.3em"
           round
-          color="warning-dark1"
-          label-color="info-light3"
+          color="error"
+          label-color="warning-light3"
           label>
-          {{ monster.hp }}
+          {{ user.hp }}
         </w-progress>
         <img width="140"
              height="170"
@@ -41,20 +42,6 @@
     </w-flex>
     <w-divider class="my3" color="blue-grey-light1">Player</w-divider>
     <w-flex align-center class="my3">
-      <div class="title5">{{ $t('user.hp') }}：</div>
-      <div class="spacer">
-        <w-progress
-          v-model="hpProgress"
-          size="1.3em"
-          round
-          color="success-light2"
-          label-color="blue"
-          label>
-          {{ user.hp }} / {{ user.hp_max }}
-        </w-progress>
-      </div>
-    </w-flex>
-    <w-flex align-center class="my3">
       <div class="title5">{{ $t('user.energy') }}：</div>
       <div class="spacer">
         <w-progress
@@ -65,6 +52,20 @@
           label-color="blue"
           label>
           {{ user.energy }} / {{ user.energy_max }}
+        </w-progress>
+      </div>
+    </w-flex>
+    <w-flex align-center class="my3">
+      <div class="title5">{{ $t('user.exp') }}：</div>
+      <div class="spacer">
+        <w-progress
+          v-model="expProgress"
+          size="1.3em"
+          round
+          color="success-light2"
+          label-color="blue"
+          label>
+          {{ user.exp }} / {{ expMax }}
         </w-progress>
       </div>
     </w-flex>
@@ -101,12 +102,14 @@
 <script>
 import Header from '@/components/outskirts/Header.vue';
 import Map from '@/components/outskirts/Map.vue';
+import Knapsack from '@/components/outskirts/Knapsack.vue';
 
 export default {
   name: 'Outskirts',
   components: {
     Header,
     Map,
+    Knapsack,
   },
   data() {
     return {
@@ -134,7 +137,7 @@ export default {
         type: 1,
         text: '壮岩兽愤怒的给了你一巴掌，却被你灵巧的避让开了。',
       }],
-      index: 1,
+      mapIndex: 1,
       monster: {
         hp: 442,
         hp_max: 750,
@@ -154,6 +157,12 @@ export default {
     energyProgress() {
       return (this.user.energy / this.user.energy_max) * 100;
     },
+    expMax() {
+      return Math.floor((1.2 ** this.user.level) * 83.4 + 50);
+    },
+    expProgress() {
+      return ((this.user.exp / this.expMax) * 100);
+    },
   },
   methods: {
     showKnapsack() {
@@ -161,6 +170,19 @@ export default {
     },
     showMap() {
       this.mapShow = true;
+    },
+    knapsackChange(result) {
+      switch (result.type) {
+        case 'show':
+          this.knapsackShow = false;
+          break;
+        case 'change':
+          // TODO 改变外貌？
+          break;
+        default:
+          console.error('不存在的类型');
+      }
+      console.info(result);
     },
     mapChange(result) {
       switch (result.type) {

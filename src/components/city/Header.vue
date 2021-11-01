@@ -10,7 +10,7 @@
       }}
     </div>
     <div class="box city">
-      {{ city.name }}({{ $t('user.level', { level: city.level }) }})
+      {{ city.name }} ({{ $t('user.levelNumber', { level: city.level }) }})
     </div>
   </w-flex>
 </template>

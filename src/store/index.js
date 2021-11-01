@@ -38,6 +38,7 @@ export default createStore({
       building: [],
       monster: [],
       goods: [],
+      maps: [],
     },
   },
   getters: {
@@ -56,6 +57,7 @@ export default createStore({
         state.config.monster = config.monsters;
         state.config.goods = config.goods;
         state.config.building = config.building;
+        state.config.maps = config.maps;
       }
 
       const city = localStorage.getItem('stateCity');
@@ -90,6 +92,7 @@ export default createStore({
       state.config.monster = playload.config.monsters;
       state.config.goods = playload.config.goods;
       state.config.building = playload.config.building;
+      state.config.maps = playload.config.maps;
 
       localStorage.setItem('version', playload.ver);
       localStorage.setItem('config', JSON.stringify(playload.config));
@@ -122,7 +125,7 @@ export default createStore({
       localStorage.setItem('stateWork', JSON.stringify(playload.work));
       localStorage.setItem('stateBuilding', JSON.stringify(playload.building));
     },
-    // 设置用户
+    // 设置用户工作
     setWork(state, work) {
       state.work = work;
       localStorage.setItem('stateWork', JSON.stringify(work));

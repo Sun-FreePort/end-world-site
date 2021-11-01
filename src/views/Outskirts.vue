@@ -1,26 +1,29 @@
 <template>
   <header>
-    <Header />
+    <Header :id="mapIndex" />
   </header>
   <main style="margin: 0 10px;">
     <Map v-if="mapShow" :id="mapIndex" @eventname="mapChange"/>
     <Knapsack v-if="knapsackShow" @eventname="knapsackChange"/>
     <w-flex wrap class="text-center my5">
       <div class="xs6 pa1">
-        <w-progress
-          v-model="hpMonsterProgress"
-          size="1.3em"
-          round
-          color="warning"
-          label-color="warning-light3"
-          label>
-          {{ monster.hp }}
-        </w-progress>
-        <img width="140"
-             height="170"
-             alt="Enemy"
-             class="pt1"
-             src="../assets/monster1.png">
+        <div v-if="monster">
+          <w-progress
+            v-model="hpMonsterProgress"
+            size="1.3em"
+            round
+            color="warning"
+            label-color="warning-light3"
+            label>
+            {{ monster.hp }}
+          </w-progress>
+          <img width="140"
+               height="170"
+               alt="Enemy"
+               class="pt1"
+               style="transform: scaleX(-1);"
+               :src="monster.icon">
+        </div>
       </div>
       <div class="xs6 pa1">
         <w-progress
@@ -35,11 +38,11 @@
         <img width="140"
              height="170"
              class="pt1"
-             style="transform: scaleX(-1);"
              alt="Player"
              src="../assets/player.png">
       </div>
     </w-flex>
+
     <w-divider class="my3" color="blue-grey-light1">Player</w-divider>
     <w-flex align-center class="my3">
       <div class="title5">{{ $t('user.energy') }}：</div>
@@ -89,6 +92,7 @@
                 color="success-light2"
                 lg>{{ $t('outskirts.knapsack') }}</w-button>
     </div>
+
     <w-divider class="my4" color="blue-grey-light1">Story</w-divider>
     <div v-for="item in info"
        :key="item.ts"
@@ -100,6 +104,7 @@
 </template>
 
 <script>
+import MD5 from 'crypto-js/md5';
 import Header from '@/components/outskirts/Header.vue';
 import Map from '@/components/outskirts/Map.vue';
 import Knapsack from '@/components/outskirts/Knapsack.vue';
@@ -113,9 +118,6 @@ export default {
   },
   data() {
     return {
-      validators: {
-        required: (value) => !!value || this.$t('default.input.required'),
-      },
       fighting: false,
       mapShow: false,
       knapsackShow: false,
@@ -138,10 +140,7 @@ export default {
         text: '壮岩兽愤怒的给了你一巴掌，却被你灵巧的避让开了。',
       }],
       mapIndex: 1,
-      monster: {
-        hp: 442,
-        hp_max: 750,
-      },
+      monster: {},
     };
   },
   computed: {
@@ -164,12 +163,78 @@ export default {
       return ((this.user.exp / this.expMax) * 100);
     },
   },
+  mounted() {
+    // 版本不同时，更新配置
+    this.$http.get('ver')
+      .then((response) => {
+        const hash = MD5(localStorage.getItem('config')).toString();
+        if (this.$store.state.ver >= response.data.ver && response.data.hash === hash) {
+          return;
+        }
+
+        this.$http.get('config')
+          .then((cRes) => {
+            this.$store.commit('setConfig', {
+              ver: response.data.ver,
+              config: cRes.data,
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    // 检测缓存，如果存在，则恢复场景
+    const infoList = localStorage.getItem('infoList');
+    if (infoList) {
+      this.info = JSON.parse(infoList);
+    }
+    this.$http.get('fight/scene')
+      .then((response) => {
+        this.monster = response.data.monster;
+        this.$store.commit('setUser', response.data.user);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    this.userRefresh();
+  },
   methods: {
+    // 战斗
+    adventure() {
+      this.$http.get('fight/adventure')
+        .then((response) => {
+          console.info(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    fight() {
+      this.$http.get('fight/attack')
+        .then((response) => {
+          console.info(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    runaway() {
+      this.$http.get('fight/runaway')
+        .then((response) => {
+          console.info(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    // 背包
     showKnapsack() {
       this.knapsackShow = true;
-    },
-    showMap() {
-      this.mapShow = true;
     },
     knapsackChange(result) {
       switch (result.type) {
@@ -183,6 +248,10 @@ export default {
           console.error('不存在的类型');
       }
       console.info(result);
+    },
+    // 地图
+    showMap() {
+      this.mapShow = true;
     },
     mapChange(result) {
       switch (result.type) {
@@ -200,6 +269,28 @@ export default {
           console.error('不存在的类型');
       }
       console.info(result);
+    },
+    // 定时获取最新用户信息
+    userRefresh() {
+      const time = localStorage.getItem('upgradeTime');
+      if (!time || Math.round(time) + 360 < this.$store.getters.tsNow) {
+        localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
+        this.$http.get('user/info')
+          .then((response) => {
+            this.$store.commit('refreshUser', {
+              user: response.data.user,
+              building: response.data.building,
+              work: response.data.work,
+              city: response.data.city,
+            });
+            localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      setTimeout(this.userRefresh, 2900);
     },
   },
 };

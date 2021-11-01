@@ -51,8 +51,8 @@ export default {
       .then((response) => {
         this.goods = response.data;
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        console.error(error);
       });
   },
 };

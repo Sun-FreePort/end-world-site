@@ -95,8 +95,8 @@ export default {
         this.count = response.data.count;
         this.lecture = response.data.data;
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        console.error(error);
       });
 
     return false;

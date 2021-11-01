@@ -10,7 +10,7 @@
       <div>
         <w-button
           class="mr2 title-map"
-          @click="closeMap"
+          @click="close"
           bg-color="info">
           {{ $t('default.close') }}
         </w-button>
@@ -64,59 +64,19 @@ export default {
   },
   computed: {
     map() {
-      return {
-        id: 1,
-        name: 'cityGate',
-        monsters: [],
-        danger: 1,
-        boss: 0,
-        deep: 0,
-        linked: [2],
-      };
+      return this.$store.state.config.maps[this.id - 1];
     },
     maps() {
-      const maps = [{
-        id: 1,
-        name: 'cityGate',
-        monsters: [],
-        danger: 1,
-        boss: 0,
-        deep: 0,
-        linked: [2],
-      }, {
-        id: 2,
-        name: 'outskirtSpinney',
-        monsters: [1, 2, 3],
-        danger: 1,
-        boss: 0,
-        deep: 1,
-        linked: [1, 3],
-      }, {
-        id: 3,
-        name: 'cabinInWoods',
-        monsters: [4, 5, 6],
-        danger: 2,
-        boss: 0,
-        deep: 2,
-        linked: [2, 4],
-      }, {
-        id: 4,
-        name: 'corpseStore',
-        monsters: [7, 8, 9],
-        danger: 3,
-        boss: 10,
-        deep: 3,
-        linked: [3],
-      }];
+      const { maps } = this.$store.state.config;
 
       const mapsNow = [];
       for (let i = 0; i < maps.length; i += 1) {
         if (maps[i].linked.includes(this.id)) {
+          maps[i].isBack = false;
           mapsNow.push(maps[i]);
         }
       }
 
-      console.info(mapsNow);
       let isBackDeep = 9999;
       let isBackIndex = 9999;
       for (let i = 0; i < mapsNow.length; i += 1) {
@@ -149,16 +109,16 @@ export default {
     }
   },
   methods: {
-    closeMap() {
+    close() {
       this.$emit('eventname', { type: 'show' });
     },
     backHome() {
       this.$emit('eventname', { type: 'backHome' });
-      this.closeMap();
+      this.close();
     },
     changeMap(id) {
       this.$emit('eventname', { type: 'change', val: id });
-      this.closeMap();
+      this.close();
     },
   },
 };

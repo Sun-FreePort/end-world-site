@@ -32,8 +32,7 @@
       </w-button>
     </div>
     <div class="box line">
-      <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/outskirts')">
+      <w-button class="ma1 grow menu-button" bg-color="info" @click="gotoOutskirts" md>
         {{ $t('city.outskirts') }}
       </w-button>
     </div>
@@ -129,10 +128,10 @@
     </w-flex>
     <w-flex column justify-center class="wrapper line">
       <p class="box">
-        <img :src="goldCoin" width="16" :alt="name">
+        <img :src="goldCoin" width="16" alt="gold">
         {{ $t('user.gold', { number: user.gold }) }}
         <br>
-        <img :src="copperCoin" width="16" :alt="name">
+        <img :src="copperCoin" width="16" alt="money">
         {{ $t('user.money', { number: user.money }) }}
       </p>
     </w-flex>
@@ -221,6 +220,15 @@ export default {
     }
   },
   methods: {
+    gotoOutskirts() {
+      const info = [{
+        ts: this.$store.getters.tsNow,
+        type: 1,
+        text: '今日风和日丽，你来到了郊外。',
+      }];
+      localStorage.setItem('infoList', JSON.stringify(info));
+      this.$router.push('/outskirts');
+    },
     sign() {
       this.$http.get('activity/sign').then((response) => {
         switch (response.status) {

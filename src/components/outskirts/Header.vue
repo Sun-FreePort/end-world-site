@@ -10,7 +10,7 @@
       }}
     </div>
     <div class="box city">
-      {{ city.name }}({{ $t('user.level', { level: city.level }) }})
+      {{ city.name }} ({{ $t('mapName.' + map.name) }})
     </div>
   </w-flex>
 </template>
@@ -18,6 +18,9 @@
 <script>
 export default {
   name: 'Header',
+  props: {
+    id: Number,
+  },
   data() {
     return {
       date: {
@@ -32,6 +35,11 @@ export default {
         land: 8702,
       },
     };
+  },
+  computed: {
+    map() {
+      return this.$store.state.config.maps[this.id - 1];
+    },
   },
 };
 </script>

@@ -56,12 +56,12 @@ export default {
               config: cRes.data,
             });
           })
-          .catch((err) => {
-            console.error(err);
+          .catch((error) => {
+            console.error(error);
           });
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        console.error(error);
       });
 
     this.userRefresh();
@@ -84,12 +84,12 @@ export default {
             });
             localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
           })
-          .catch((err) => {
-            console.error(err);
+          .catch((error) => {
+            console.error(error);
           });
       }
 
-      setTimeout(this.userRefresh, 29000);
+      setTimeout(this.userRefresh, 2900);
     },
   },
 };

@@ -176,8 +176,12 @@ const messages = {
     mapName: {
       cityGate: '城门',
       outskirtSpinney: '西郊密林',
+      outskirtMoor: '北郊旷野',
       cabinInWoods: '林中小屋',
       corpseStore: '藏尸处',
+      blackPond: '黑池塘',
+      disuseFishery: '废弃渔场',
+      lonelyTown: '孤独镇',
     },
     policy: {
       privacyTitle: 'Privacy Policy',

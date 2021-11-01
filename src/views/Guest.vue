@@ -65,7 +65,7 @@ export default {
     this.$http.get('ver')
       .then((response) => {
         this.human = response.data.human;
-        this.ver = response.data.ver;
+        this.ver = response.data.ver.toString();
       })
       .catch((err) => {
         console.error(err);

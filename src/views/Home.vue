@@ -82,7 +82,6 @@ export default {
               work: response.data.work,
               city: response.data.city,
             });
-            localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
           })
           .catch((error) => {
             console.error(error);

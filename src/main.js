@@ -60,8 +60,6 @@ app.config.globalProperties.$http.interceptors.response
         return null;
       case 500:
         // TODO Alert，UI 库好像没有现成组件
-        // eslint-disable-next-line no-alert
-        alert(error.response.data);
         break;
       default:
         break;

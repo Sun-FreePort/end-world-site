@@ -121,6 +121,7 @@ const messages = {
       work201: '有工作进行中，现在无法安排新工作',
       work412: '体力不足',
       weight413: '背包装不下这么沉的东西',
+      work500: '工作进行失败，请重试',
       refreshWork500: '工作无法结算，这是一种非临时故障，请反馈',
     },
     goods: {
@@ -255,6 +256,7 @@ const messages = {
       onlyMe: '我发布的',
       start: '应 聘',
       end: '终止工作',
+      selfPublish: '我发布',
       nowWork: '{money}铜币/小时，剩余{min}分钟',
       zeroJob: '本地暂无工作岗位',
       amountShow: '需聘用：{number}',

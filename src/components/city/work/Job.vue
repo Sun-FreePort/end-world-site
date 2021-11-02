@@ -12,6 +12,7 @@
     </w-flex>
 
     <template #actions>
+      <span v-if="boss_id === user.id">😎{{ $t('work.selfPublish') }}</span>
       <div class="spacer"></div>
       <w-button bg-color="error"
                 class="mr2"
@@ -92,6 +93,9 @@ export default {
   computed: {
     amountNow() {
       return this.amount + this.amountAdd;
+    },
+    user() {
+      return this.$store.state.user;
     },
     building() {
       return this.$store.state.config.building[this.job - 1] ?? {

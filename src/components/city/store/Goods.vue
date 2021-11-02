@@ -131,6 +131,8 @@ export default {
             console.error(`${key} is new effect in goods config`);
             break;
         }
+
+        if (this.effect === '') this.effect = this.$t('goods.effectNull');
         return true;
       });
     },

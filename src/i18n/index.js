@@ -57,6 +57,7 @@ const messages = {
       cancel: '取消',
       next: '下一条',
       last: '上一条',
+      overdue: '已过期',
       goto_sign: '[Goto Sign]',
       limit_length: '{attribute}长度为 {min}-{max} 个字符',
       need_confirmed: '{attribute}与再次确认的输入值不一致',
@@ -185,6 +186,12 @@ const messages = {
       runaway: '逃跑',
       goto: '前往',
       canGoto: '通往{name}',
+    },
+    market: {
+      sellButton: '我 要 出 售',
+      historyButton: '交 易 记 录',
+      price: '价格：{price} 元/份',
+      count: '{number} 份',
     },
     mapName: {
       cityGate: '城门',

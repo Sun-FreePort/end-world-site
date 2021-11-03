@@ -103,6 +103,14 @@ export default createStore({
       state.user.token = loginData.api_token;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
+    // 锁住提交状态
+    setSubmitting(state) {
+      state.submitting = true;
+    },
+    // 清理提交状态
+    cancelSubmitting(state) {
+      state.submitting = false;
+    },
     // 清理用户状态
     clearUser(state) {
       state.user.id = 0;

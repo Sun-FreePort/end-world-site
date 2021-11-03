@@ -42,6 +42,7 @@ app.config.globalProperties.$http.interceptors.request.use(
 // 响应拦截器
 app.config.globalProperties.$http.interceptors.response
   .use((response) => response, (error) => {
+    app.config.globalProperties.$store.commit('cancelSubmitting');
     switch (error.response.status) {
       case 401:
         localStorage.removeItem('stateUser');

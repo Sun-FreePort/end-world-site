@@ -58,6 +58,7 @@ const messages = {
       next: '下一条',
       last: '上一条',
       overdue: '已过期',
+      quickClick: '请不要点的太快哟',
       goto_sign: '[Goto Sign]',
       limit_length: '{attribute}长度为 {min}-{max} 个字符',
       need_confirmed: '{attribute}与再次确认的输入值不一致',

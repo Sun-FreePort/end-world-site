@@ -12,7 +12,7 @@
     </w-flex>
 
     <template #actions>
-      <span v-if="boss_id === user.id">😎{{ $t('work.selfPublish') }}</span>
+      <span style="color: #ffee99" v-if="boss_id === user.id">😎{{ $t('work.selfPublish') }}</span>
       <div class="spacer"></div>
       <w-button bg-color="error"
                 class="mr2"
@@ -130,11 +130,18 @@ export default {
         return false;
       }
 
+      if (this.$store.state.submitting) {
+        this.tip = this.$t('default.quickClick');
+        this.tipShow = true;
+        return false;
+      }
       this.jobShow = false;
+      this.$store.commit('setSubmitting');
       this.$http.post('work/job', {
         id: this.id,
         hour: this.hour,
       }).then((response) => {
+        this.$store.commit('cancelSubmitting');
         this.$store.commit('setWork', response.data);
         this.$store.commit('changeUserEnergy', -this.building.energy * this.hour);
         this.amountAdd -= 1;

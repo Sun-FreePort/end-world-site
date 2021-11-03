@@ -22,6 +22,12 @@
         <div class="spacer" />
         <w-button
           class="mr2"
+          @click="sellSubmit"
+          bg-color="error">
+          {{ $t('goods.consume') }}
+        </w-button>
+        <w-button
+          class="mr2"
           @click="consumeSubmit"
           bg-color="error">
           {{ $t('goods.consume') }}

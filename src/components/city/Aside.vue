@@ -2,10 +2,13 @@
   <w-flex column align-center justify-start class="wrapper">
     <div class="box"><img width="112" alt="City Avatar" src="https://img2.baidu.com/it/u=1881182452,3230762371&fm=26&fmt=auto"></div>
     <div class="box line">
-      <w-button class="ma1 grow menu-button" bg-color="info" md
-                @click="() => $router.push('/home/square')">
-        {{ $t('city.square') }}
-      </w-button>
+      <w-badge v-model="showSquareBadge"
+               bg-color="red" dot sm>
+        <w-button class="ma1 grow menu-button" bg-color="info" md
+                  @click="() => $router.push('/home/square')">
+          {{ $t('city.square') }}
+        </w-button>
+      </w-badge>
     </div>
     <div class="box line">
       <w-button class="ma1 grow menu-button" bg-color="info" md
@@ -209,6 +212,9 @@ export default {
     energy() {
       return ((this.user.energy / this.user.energy_max) * 100);
     },
+    showSquareBadge() {
+      return this.$store.state.square.lastID - this.$store.state.square.showID;
+    },
   },
   mounted() {
     const signTime = localStorage.getItem('signTime');
@@ -218,8 +224,6 @@ export default {
     if (!signTime || signTime < this.$store.getters.tsToday) {
       this.signShow = true;
     }
-
-    this.userHPUpgrade();
   },
   methods: {
     gotoOutskirts() {
@@ -260,14 +264,6 @@ export default {
         this.tip = this.$t(`error.${error.response.data.message}`);
         this.tipShow = true;
       });
-    },
-    userHPUpgrade() {
-      const time = localStorage.getItem('hpTime');
-      if (!time || Math.round(time) < this.$store.getters.tsNow) {
-        localStorage.setItem('hpTime', this.$store.getters.tsNow);
-        this.$store.commit('changeUserHp', 1);
-        setTimeout(this.userHPUpgrade, 1050);
-      }
     },
   },
 };

@@ -3,6 +3,8 @@ import { createStore } from 'vuex';
 export default createStore({
   state: {
     ver: 0,
+    humanWorld: 0,
+    tsDiff: 0,
     user: {
       id: 0,
       token: null,
@@ -34,6 +36,10 @@ export default createStore({
     building: [],
     work: null,
     city: {},
+    square: {
+      lastID: 0,
+      showID: 0,
+    },
     config: {
       building: [],
       monster: [],
@@ -42,7 +48,7 @@ export default createStore({
     },
   },
   getters: {
-    tsNow: () => Math.ceil(new Date().getTime() / 1000),
+    tsNow: (state) => Math.ceil(new Date().getTime() / 1000 - state.tsDiff),
     tsToday: () => Math.ceil(new Date(new Date().toLocaleDateString()).getTime() / 1000),
   },
   mutations: {
@@ -85,10 +91,17 @@ export default createStore({
       if (building) {
         state.building = JSON.parse(building);
       }
+
+      const square = localStorage.getItem('stateSquare');
+      if (square) {
+        state.square = JSON.parse(square);
+      }
     },
     // 检测版本
     setConfig(state, playload) {
       console.info('SetConfig!');
+      state.ver = playload.ver;
+      state.humanWorld = playload.human;
       state.config.monster = playload.config.monsters;
       state.config.goods = playload.config.goods;
       state.config.building = playload.config.building;
@@ -181,6 +194,21 @@ export default createStore({
     changeUserGold(state, val) {
       state.user.gold += val;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 设置广场最新 ID
+    setSquareID(state, val) {
+      state.square.lastID = val;
+      state.square.showID = val;
+      localStorage.setItem('stateSquare', JSON.stringify(state.square));
+    },
+    // 设置广场已看
+    setSquareLastID(state, val) {
+      state.square.lastID = val;
+      localStorage.setItem('stateSquare', JSON.stringify(state.square));
+    },
+    // 设置广场已看
+    setTime(state, val) {
+      state.time = val;
     },
   },
   actions: {

@@ -48,8 +48,6 @@ export default {
   data() {
     return {
       isLogin: true,
-      human: 0,
-      ver: '?',
       local: localStorage.getItem('local') ?? 'en',
       items: [
         { label: this.$t('default.en'), value: 'en' },
@@ -57,19 +55,18 @@ export default {
       ],
     };
   },
+  computed: {
+    ver() {
+      return this.$store.state.ver ?? '?';
+    },
+    human() {
+      return this.$store.state.humanWorld;
+    },
+  },
   mounted() {
     if (this.$store.state.user.token) {
       return this.$router.push('/home');
     }
-
-    this.$http.get('ver')
-      .then((response) => {
-        this.human = response.data.human;
-        this.ver = response.data.ver.toString();
-      })
-      .catch((err) => {
-        console.error(err);
-      });
 
     return false;
   },
@@ -86,7 +83,6 @@ export default {
     },
     // 选择语言
     selectLang() {
-      console.info(this.$i18n.locale);
       if (this.$i18n.locale === undefined) {
         this.$i18n.locale = localStorage.getItem('local') ?? 'en';
         this.local = localStorage.getItem('local') ?? 'en';

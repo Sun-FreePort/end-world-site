@@ -13,7 +13,7 @@
             size="1.3em"
             round
             color="warning"
-            label-color="warning-light3"
+            label-color="error-dark2"
             label>
             {{ monster.hp }}
           </w-progress>
@@ -31,7 +31,7 @@
           size="1.3em"
           round
           color="error"
-          label-color="warning-light3"
+          label-color="info-dark1"
           label>
           {{ user.hp }}
         </w-progress>
@@ -168,7 +168,7 @@ export default {
       tip: '',
       info: [],
       mapIndex: 1,
-      monster: {},
+      monster: null,
     };
   },
   computed: {
@@ -195,6 +195,10 @@ export default {
     },
   },
   mounted() {
+    if (!this.user.token) {
+      return this.$router.push('/');
+    }
+
     // 版本不同时，更新配置
     this.$http.get('ver')
       .then((response) => {
@@ -222,6 +226,7 @@ export default {
     const infoList = localStorage.getItem('infoList');
     if (infoList) {
       this.info = JSON.parse(infoList);
+      console.info(this.info[0]);
     }
     this.$http.get('fight/scene')
       .then((response) => {
@@ -245,19 +250,34 @@ export default {
       .catch((error) => {
         console.error(error);
       });
-
-    this.userRefresh();
-    this.userHPUpgrade();
+    return true;
   },
   methods: {
     // 战斗
     adventure() {
+      if (this.$store.state.submitting) {
+        this.tip = this.$t('default.quickClick');
+        this.tipShow = true;
+        return false;
+      }
+      this.$store.commit('setSubmitting');
+
       this.$http.get('fight/adventure')
         .then((response) => {
+          this.$store.commit('cancelSubmitting');
+          if (Array.isArray(response.data)) {
+            this.addInfo(1, this.$t('outskirts.adventureEmpty'));
+            return false;
+          }
+
           this.monster = response.data;
           if (!this.monster.icon) {
             this.monster.icon = this.$store.state.config.monster[this.monster.id].icon;
           }
+          this.addInfo(2, this.$t('outskirts.adventure', {
+            monster: this.monster.name,
+          }));
+          return true;
         })
         .catch((error) => {
           switch (error.response.data.message) {
@@ -272,6 +292,7 @@ export default {
               break;
           }
         });
+      return true;
     },
     fight() {
       const NEED_ENERGY_MAX = 1;
@@ -292,10 +313,17 @@ export default {
               this.$store.commit('changeUserHp', -response.data.injury);
               break;
             case 2:
-              this.addInfo(2, this.$t('outskirts.win', {
-                monster: this.monster.name,
-                attack: response.data.attack,
-              }));
+              if (response.data.trophy) {
+                this.addInfo(2, this.$t('outskirts.winGot', {
+                  monster: this.monster.name,
+                  attack: response.data.attack,
+                }));
+              } else {
+                this.addInfo(2, this.$t('outskirts.winEmpty', {
+                  monster: this.monster.name,
+                  attack: response.data.attack,
+                }));
+              }
               this.monster = null;
               this.$store.commit('changeUserHp', -response.data.injury);
               break;
@@ -336,14 +364,28 @@ export default {
         });
     },
     runaway() {
+      if (this.$store.state.submitting) {
+        this.tip = this.$t('default.quickClick');
+        this.tipShow = true;
+        return false;
+      }
+      this.$store.commit('setSubmitting');
+
       this.$http.get('fight/runaway')
         .then((response) => {
-          console.info(response);
+          this.$store.commit('cancelSubmitting');
+          console.info(response.data);
+          const random = Math.floor(Math.random() * 2);
+          this.addInfo(2, this.$t(`outskirts.runaway${random}`, {
+            monster: this.monster.name,
+          }));
+          this.monster = null;
         })
         .catch((error) => {
           switch (error.response.data.message) {
             case 'runaway201':
               this.addInfo(1, this.$t(`error.${error.response.data.message}`));
+              this.monster = null;
               break;
             default:
               console.error(error);
@@ -352,6 +394,7 @@ export default {
               break;
           }
         });
+      return true;
     },
     // 背包
     showKnapsack() {
@@ -394,8 +437,8 @@ export default {
               this.$store.commit('changeUserEnergy', -NEED_ENERGY_MAX);
               const lastName = this.$t(`mapName.${this.map.name}`);
               this.mapIndex = result.val;
-              const random = Math.floor(Math.random() * 3);
 
+              const random = Math.floor(Math.random() * 3);
               this.addInfo(1, this.$t(`outskirts.journeyContinue${random}`, {
                 name: this.$t(`mapName.${this.map.name}`),
                 lastName,
@@ -436,7 +479,7 @@ export default {
     },
     // 添加信息
     addInfo(type, text) {
-      this.info.push({
+      this.info.unshift({
         ts: this.$store.getters.tsNow,
         type,
         text,
@@ -445,36 +488,6 @@ export default {
         this.info.pop();
       }
       localStorage.setItem('infoList', JSON.stringify(this.info));
-    },
-    // 定时获取最新用户信息
-    userRefresh() {
-      const time = localStorage.getItem('upgradeTime');
-      if (!time || Math.round(time) + 360 < this.$store.getters.tsNow) {
-        localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
-        this.$http.get('user/info')
-          .then((response) => {
-            this.$store.commit('refreshUser', {
-              user: response.data.user,
-              building: response.data.building,
-              work: response.data.work,
-              city: response.data.city,
-            });
-            localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-
-      setTimeout(this.userRefresh, 2900);
-    },
-    userHPUpgrade() {
-      const time = localStorage.getItem('hpTime');
-      if (!time || Math.round(time) < this.$store.getters.tsNow) {
-        localStorage.setItem('hpTime', this.$store.getters.tsNow);
-        this.$store.commit('changeUserHp', 1);
-        setTimeout(this.userHPUpgrade, 1050);
-      }
     },
   },
 };

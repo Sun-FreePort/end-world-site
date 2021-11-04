@@ -1,12 +1,12 @@
 <template>
   <w-flex wrap class="text-center">
     <div class="xs6 pa1">
-      <w-button class="ma1 py3" bg-color="warning" @click="showSell" shadow lg>
+      <w-button class="ma1" bg-color="warning" @click="showSell" shadow lg>
         {{ $t('market.sellButton') }}
       </w-button>
     </div>
     <div class="xs6 pa1">
-      <w-button class="ma1 py3" bg-color="info" shadow lg>
+      <w-button class="ma1" bg-color="info" shadow lg>
         {{ $t('market.historyButton') }}
       </w-button>
     </div>

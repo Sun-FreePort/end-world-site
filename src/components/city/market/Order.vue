@@ -117,6 +117,7 @@ export default {
       }
       const time = new Date(this.end_at * 1000);
       return this.$t('market.overdueTime', {
+        day: time.getDate(),
         hour: time.getHours(),
         minute: time.getMinutes(),
       });

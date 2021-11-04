@@ -94,6 +94,10 @@ export default {
       .then((response) => {
         this.count = response.data.count;
         this.lecture = response.data.data;
+
+        if (this.lecture.length) {
+          this.$store.commit('setSquareID', this.lecture[0].id);
+        }
       })
       .catch((error) => {
         console.error(error);

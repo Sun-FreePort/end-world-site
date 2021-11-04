@@ -40,22 +40,13 @@ app.config.globalProperties.$http.interceptors.request.use(
 // 响应拦截器
 app.config.globalProperties.$http.interceptors.response
   .use((response) => response, (error) => {
+    console.info(error);
     app.config.globalProperties.$store.commit('cancelSubmitting');
     switch (error.response.status) {
       case 401:
         localStorage.removeItem('stateUser');
         app.config.globalProperties.$store.commit('clearUser');
         app.config.globalProperties.$router.push('/');
-        // tip.fire({
-        //   title: vueObj.$t('default.ops'),
-        //   text: vueObj.$t('default.token_failed_to_sign'),
-        //   confirmButtonColor: '#DD6B55',
-        //   confirmButtonText: 'Yes',
-        // })
-        //   .then(() => {
-        //     localStorage.setItem('lastURI', window.location.pathname);
-        //     window.location = '/sign';
-        //   });
         return null;
       case 500:
         // TODO Alert，UI 库好像没有现成组件
@@ -63,7 +54,6 @@ app.config.globalProperties.$http.interceptors.response
       default:
         break;
     }
-    console.info(error);
     return Promise.reject(error);
   });
 

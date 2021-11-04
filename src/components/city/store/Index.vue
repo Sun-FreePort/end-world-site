@@ -43,7 +43,7 @@ export default {
       return this.$t('user.weight', { weight: this.$store.state.user.weight });
     },
     progress() {
-      return this.$store.state.user.weight / this.$store.state.user.weight_max;
+      return (this.$store.state.user.weight / this.$store.state.user.weight_max) * 100;
     },
   },
   mounted() {

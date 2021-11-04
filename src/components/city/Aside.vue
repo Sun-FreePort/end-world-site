@@ -218,6 +218,8 @@ export default {
     if (!signTime || signTime < this.$store.getters.tsToday) {
       this.signShow = true;
     }
+
+    this.userHPUpgrade();
   },
   methods: {
     gotoOutskirts() {
@@ -258,6 +260,14 @@ export default {
         this.tip = this.$t(`error.${error.response.data.message}`);
         this.tipShow = true;
       });
+    },
+    userHPUpgrade() {
+      const time = localStorage.getItem('hpTime');
+      if (!time || Math.round(time) < this.$store.getters.tsNow) {
+        localStorage.setItem('hpTime', this.$store.getters.tsNow);
+        this.$store.commit('changeUserHp', 1);
+        setTimeout(this.userHPUpgrade, 1050);
+      }
     },
   },
 };

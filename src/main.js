@@ -11,8 +11,6 @@ import store from './store';
 
 const app = createApp(App);
 
-// app.use(axios);
-
 // eslint-disable-next-line no-new
 const waveUI = new WaveUI(app, {
   // Some Wave UI options.
@@ -65,6 +63,7 @@ app.config.globalProperties.$http.interceptors.response
       default:
         break;
     }
+    console.info(error);
     return Promise.reject(error);
   });
 

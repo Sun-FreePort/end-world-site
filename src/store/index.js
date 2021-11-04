@@ -172,6 +172,11 @@ export default createStore({
       state.user.money += val;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
+    // 更新用户负重
+    changeUserWeight(state, val) {
+      state.user.weight += val;
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
     // 更新用户金币
     changeUserGold(state, val) {
       state.user.gold += val;

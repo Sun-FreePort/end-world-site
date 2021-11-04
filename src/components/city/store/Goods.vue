@@ -1,12 +1,14 @@
 <template>
-  <div class="box" @click="useOrConsume">
-    <img :src="iconBase64" width="64" :alt="name">
-    <p class="count">{{ countNow }}</p>
+  <div>
+    <div class="box" @click="useOrConsume">
+      <img :src="iconBase64" width="64" :alt="name">
+      <p class="count">{{ countNow }}</p>
+    </div>
 
     <!-- 消耗 -->
     <w-dialog
       v-model="useShow"
-      :title="name"
+      :title="$t('goods.consume') + name"
       persistent
       :width="320">
       <p style="text-align: left; color: #7b828c">
@@ -22,7 +24,7 @@
         <div class="spacer" />
         <w-button
           class="mr2"
-          @click="sellSubmit"
+          @click="showSell"
           bg-color="error">
           {{ $t('market.sell') }}
         </w-button>
@@ -49,14 +51,17 @@
     <!-- 出售 -->
     <w-dialog
       v-model="sellShow"
-      :title="name"
+      :title="$t('market.sell') + name"
       persistent
       :width="320">
       <p style="text-align: left; color: #7b828c">
-        {{ $t('goods.consumeTip') }}<br /><br />
+        {{ $t('market.sellTip') }}<br /><br />
         {{ $t('goods.effectTitle') }}
       </p>
       <p v-html="effect"></p>
+      <w-input :label="$t('market.price')"
+               type="number"
+               v-model="price"></w-input>
       <w-input :label="$t('default.number')"
                type="number"
                v-model="number"></w-input>
@@ -65,18 +70,12 @@
         <div class="spacer" />
         <w-button
           class="mr2"
-          @click="consumeSubmit"
+          @click="sellSubmit"
           bg-color="error">
-          {{ $t('goods.consume') }}
+          {{ $t('market.sell') }}
         </w-button>
         <w-button
-          class="mr2"
-          @click="discardSubmit"
-          bg-color="warning">
-          {{ $t('default.discard') }}
-        </w-button>
-        <w-button
-          @click="useShow = false"
+          @click="sellShow = false"
           bg-color="success">
           {{ $t('default.cancel') }}
         </w-button>
@@ -113,6 +112,7 @@ export default {
   data() {
     return {
       name: 0,
+      price: null,
       number: 1,
       countAdd: 0,
       iconBase64: '',
@@ -180,15 +180,44 @@ export default {
         return true;
       });
     },
-    sellSubmit() {
+    showSell() {
       this.useShow = false;
       this.sellShow = true;
     },
+    // 出售道具
+    sellSubmit() {
+      if (this.number < 1 || this.number > this.countNow) {
+        this.tip = this.$t('goods.useLimit', { number: this.countNow });
+        this.tipShow = true;
+        return false;
+      }
+      if (this.price < 1) {
+        this.tip = this.$t('market.priceLimit');
+        this.tipShow = true;
+        return false;
+      }
+
+      this.sellShow = false;
+      this.$http.post('market/order', {
+        index: this.index,
+        price: this.price,
+        number: this.number,
+      }).then(() => {
+        this.countAdd -= this.number;
+        this.tip = this.$t('market.setDone');
+        this.tipShow = true;
+      }).catch((error) => {
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
+      });
+      return true;
+    },
+    // 丢弃道具
     discardSubmit() {
       this.tip = '本功能尚未开通';
-      // this.tip = this.$t(`error.${error.response.data.message}`);
       this.tipShow = true;
     },
+    // 消耗/使用道具
     consumeSubmit() {
       if (this.number < 0 || this.number > this.countNow) {
         this.tip = this.$t('goods.useLimit', { number: this.countNow });
@@ -246,7 +275,6 @@ export default {
         }
         return true;
       }).catch((error) => {
-        console.info(error);
         this.tip = this.$t(`error.${error.response.data.message}`);
         this.tipShow = true;
       });

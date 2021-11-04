@@ -24,8 +24,45 @@
           class="mr2"
           @click="sellSubmit"
           bg-color="error">
+          {{ $t('market.sell') }}
+        </w-button>
+        <w-button
+          class="mr2"
+          @click="consumeSubmit"
+          bg-color="error">
           {{ $t('goods.consume') }}
         </w-button>
+        <w-button
+          class="mr2"
+          @click="discardSubmit"
+          bg-color="warning">
+          {{ $t('default.discard') }}
+        </w-button>
+        <w-button
+          @click="useShow = false"
+          bg-color="success">
+          {{ $t('default.cancel') }}
+        </w-button>
+      </template>
+    </w-dialog>
+
+    <!-- 出售 -->
+    <w-dialog
+      v-model="sellShow"
+      :title="name"
+      persistent
+      :width="320">
+      <p style="text-align: left; color: #7b828c">
+        {{ $t('goods.consumeTip') }}<br /><br />
+        {{ $t('goods.effectTitle') }}
+      </p>
+      <p v-html="effect"></p>
+      <w-input :label="$t('default.number')"
+               type="number"
+               v-model="number"></w-input>
+
+      <template #actions>
+        <div class="spacer" />
         <w-button
           class="mr2"
           @click="consumeSubmit"
@@ -80,6 +117,7 @@ export default {
       countAdd: 0,
       iconBase64: '',
       effect: '',
+      sellShow: false,
       useShow: false,
       tipShow: false,
       tip: '',
@@ -141,6 +179,10 @@ export default {
         if (this.effect === '') this.effect = this.$t('goods.effectNull');
         return true;
       });
+    },
+    sellSubmit() {
+      this.useShow = false;
+      this.sellShow = true;
     },
     discardSubmit() {
       this.tip = '本功能尚未开通';

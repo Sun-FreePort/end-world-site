@@ -152,9 +152,10 @@ export default {
         if (error.response.data.message === 'work201') {
           this.$http.get('user/work')
             .then((response) => {
-              console.info(response.data);
               this.$store.commit('setWork', response.data);
             });
+        } else if (error.response.data.message === 'job403') {
+          this.amountAdd -= this.amount;
         }
       });
 

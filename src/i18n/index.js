@@ -129,7 +129,7 @@ const messages = {
     goods: {
       useLimit: '数量范围为 1~{number}',
       consume: '使用',
-      consumeTip: '消耗物品使其生效，请问这次要用多少：',
+      consumeTip: '消耗/装备物品使其生效，请问这次要用多少：',
       effectTitle: '本物品的功效为：',
       effectNull: '暂时无用。',
       effectHpP: '恢复生命 {number} 点<br/>',
@@ -189,6 +189,7 @@ const messages = {
       canGoto: '通往{name}',
     },
     market: {
+      sell: '出售',
       sellButton: '我 要 出 售',
       historyButton: '交 易 记 录',
       price: '价格：{price} 元/份',

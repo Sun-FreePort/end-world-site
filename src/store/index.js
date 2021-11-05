@@ -4,7 +4,6 @@ export default createStore({
   state: {
     ver: 0,
     humanWorld: 0,
-    tsDiff: 0,
     user: {
       id: 0,
       token: null,
@@ -48,7 +47,14 @@ export default createStore({
     },
   },
   getters: {
-    tsNow: (state) => Math.ceil(new Date().getTime() / 1000 - state.tsDiff),
+    getYear: () => new Date().getFullYear() - 2020,
+    getMonth: () => new Date().getMonth(),
+    getDay: () => new Date().getDate(),
+    getHour: () => new Date().getHours(),
+    getMinute: () => new Date().getMinutes(),
+    getSecond: () => new Date().getSeconds(),
+
+    tsNow: () => Math.ceil(new Date().getTime() / 1000),
     tsToday: () => Math.ceil(new Date(new Date().toLocaleDateString()).getTime() / 1000),
   },
   mutations: {

@@ -111,7 +111,7 @@ export default {
       this.$http.post('city/square/lecture', { talk: this.talk })
         .then((response) => {
           this.count += 1;
-          this.$store.commit('changeUserEnergy', -60);
+          this.$store.commit('changeUserEnergy', -45);
           this.lecture.unshift({
             id: response.data,
             like: 0,

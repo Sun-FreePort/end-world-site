@@ -199,29 +199,6 @@ export default {
       return this.$router.push('/');
     }
 
-    // 版本不同时，更新配置
-    this.$http.get('ver')
-      .then((response) => {
-        const hash = MD5(localStorage.getItem('config')).toString();
-        if (this.$store.state.ver >= response.data.ver && response.data.hash === hash) {
-          return;
-        }
-
-        this.$http.get('config')
-          .then((cRes) => {
-            this.$store.commit('setConfig', {
-              ver: response.data.ver,
-              config: cRes.data,
-            });
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
     // 检测缓存，如果存在，则恢复场景
     const infoList = localStorage.getItem('infoList');
     if (infoList) {

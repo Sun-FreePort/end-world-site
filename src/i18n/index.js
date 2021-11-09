@@ -160,7 +160,10 @@ const messages = {
       straw: '秸秆',
       wheatMeal: '小麦粗粉',
       chowMein: '炒面',
-      berryMeatball: '浆果丸子',
+      berryBall: '浆果丸子',
+      meatball: '肉丸子',
+      berryMeatball: '浆果肉丸',
+      charcoal: '木炭',
     },
     outskirts: {
       adventure: '探索',

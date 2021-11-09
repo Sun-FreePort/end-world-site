@@ -144,7 +144,6 @@
 </template>
 
 <script>
-import MD5 from 'crypto-js/md5';
 import Header from '@/components/outskirts/Header.vue';
 import Map from '@/components/outskirts/Map.vue';
 import Knapsack from '@/components/outskirts/Knapsack.vue';
@@ -203,7 +202,6 @@ export default {
     const infoList = localStorage.getItem('infoList');
     if (infoList) {
       this.info = JSON.parse(infoList);
-      console.info(this.info[0]);
     }
     this.$http.get('fight/scene')
       .then((response) => {

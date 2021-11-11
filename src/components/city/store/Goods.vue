@@ -198,7 +198,7 @@ export default {
       }
 
       this.sellShow = false;
-      this.$http.post('market/order', {
+      this.$http.post('city/market', {
         index: this.index,
         price: this.price,
         number: this.number,

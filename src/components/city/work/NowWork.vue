@@ -17,7 +17,7 @@
                 <strong style="font-size: medium">{{ $t('jobName.' + work.job) }}</strong>
               </div>
               <div class="box">
-                <p>{{ $t('work.nowWork', { money: work.profit, min: lessTime }) }}</p>
+                <p>{{ $t('work.nowWork', { money: work.profit, time: lessTime }) }}</p>
               </div>
             </w-flex>
           </div>
@@ -102,7 +102,10 @@ export default {
     lessTime() {
       if (!this.$store.state.work) return 0;
 
-      return Math.floor((this.$store.state.work.end_at - this.$store.getters.tsNow) / 60);
+      const time = this.$store.state.work.end_at - this.$store.getters.tsNow;
+      const min = Math.floor(time / 60);
+      const sec = time % 60;
+      return `${min}:${sec}`;
     },
   },
   mounted() {

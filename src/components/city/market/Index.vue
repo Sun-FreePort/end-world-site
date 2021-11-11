@@ -89,7 +89,7 @@ export default {
     },
     // 获得售单列表
     orderList() {
-      let url = `market/order?page=${this.page}&number=10`;
+      let url = `city/market?page=${this.page}&number=10`;
       if (this.onlyMe) {
         url += '&self=1';
       }

@@ -144,7 +144,7 @@ export default {
       this.$store.commit('setSubmitting');
       this.buyShow = false;
 
-      this.$http.put('market/order', {
+      this.$http.put('city/market', {
         id: this.id,
         number: this.got,
       }).then(() => {
@@ -178,7 +178,7 @@ export default {
       this.$store.commit('setSubmitting');
       this.buyShow = false;
 
-      this.$http.delete(`market/order?id=${this.id}`).then(() => {
+      this.$http.delete(`city/market?id=${this.id}`).then(() => {
         this.$store.commit('cancelSubmitting');
         this.overdue = true;
         this.numberAdd -= this.number;

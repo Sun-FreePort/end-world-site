@@ -35,20 +35,21 @@ export default {
         console.error(error);
       });
 
-    this.userRefresh();
+    this.userRefresh(true);
     this.userHPUpgrade();
     return false;
   },
   methods: {
     // 定时获取最新用户信息
-    userRefresh() {
+    userRefresh(first = false) {
       const time = localStorage.getItem('upgradeTime');
-      if (!time || Math.round(time) + 360 < this.$store.getters.tsNow) {
-        setTimeout(this.userRefresh, 2900);
+      setTimeout(this.userRefresh, 2900);
+      localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
+
+      if (first || !time || Math.round(time) + 360 < this.$store.getters.tsNow) {
         if (!this.$store.state.user || !this.$store.state.user.token) {
           return false;
         }
-        localStorage.setItem('upgradeTime', this.$store.getters.tsNow);
         this.$http.get('user/info')
           .then((response) => {
             this.$store.commit('setTime', response.data.ts);

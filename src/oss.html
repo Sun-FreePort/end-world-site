@@ -5,13 +5,23 @@
     <title>OSS</title>
 </head>
 <body>
-<input type="file" name="file" id="files">
-<br>
-<label for="filename">文件名：</label>
+<label for="filepath">文件路径：</label>
+<input type="text" name="filepath" id="filepath">
+
+<br><br>
+
+<label for="filename">文件名(*)：</label>
 <input type="text" name="filename" id="filename">
+
+<br><br>
+
+<input type="file" name="file" id="files">
+
+<p>URL：<span id="url-show">待上传</span></p>
 
 <script src="https://gosspublic.alicdn.com/aliyun-oss-sdk-6.8.0.min.js"></script>
 <script type="text/javascript">
+  // Get prod sts token by https://baseadmin.weicha88.com/mzt-base-admin//sts
   const stsToken = 'CAISngR1q6Ft5B2yfSjIr5fSMv3dvaZx4/eqcXD003A9XLxgvIjG2zz2IHxJfnRtCe0Xt/8xmWlW7P0clqN2WYNyXVHOacp7tn7gc94FJNivgde8yJBZogPPa/P5aXPS2MvVfJ8aJrG5U/yxalfCuzZuyL/hD1uLVECkNpv7E/cFC9MMRVuAcCZhDtVbLRcAzsgBLinpMu2xFRToj2HMbjJvoREuoHtn5KKz5cee5xHC7i790fRHhoLwPpmtc8RJIZNjUs+8xvBLbq7G2SIyjR9R7/VLlKhD8Dv/t8uBYSNW+A7UDvLQ9dRjFAZjeoM9A78m3//njq9TvenLk4nrxjNQOf1USy3FWL24xMzNFIHZMc0iJ5/xPG7R982LKpjtuhk4XGofMwpGGaomMWQiLR03VhTHLrOm4FnQfjq7T6+M3LpUtJ1u1AfM/MGWH1GVX677tCEDIc0TYl8CKhUV0HCDFagdaF5ockh7ILyXQI5vd2pqy8XSsBbVSzdrw1xOovT6fIm2gK0EbpjlVZ80+ehqbZ9d4WwxVAa1GfD8gUARcWtjBLNEzOz1JJW76bTCgofmaOXdWPccoQcYI3KDpC2ITHRWaCjj+pg7dFCc+s/ztPWSosI4QFRyu4EFXV/eIItXwgY4s/fo3XO66/T+V32mxG089+TD8pNHgUkeJav52bLP7mOP5SfOPPBnwpyJQg10XQ/yZ3Fi3OABFNXsNdHr+BqAAWWRq1JwiutSM8mC5+WOp6NZt7qGFBMPO007N+x8ERvJxpc4lTYEGb7rs2p1qCi+7RpQtxnRphOqR4HvFsidcGWOVk9gN0tKBagdRErVN6ETk6//jDSsf2x7/VAnMRYU3dW1eHOGdsi1EwBMdRB9QLob7Q/eaC/XDEnL/YtMxZvr';
 
   const client = new OSS({
@@ -29,14 +39,20 @@
     .addEventListener('change', function (evt) {
       const file = evt.target.files[0];
       console.info(file);
-      const filename = document.getElementById("filename").value;
-      // client.put(filename, file).then(function (r1) {
-      //   console.log('put success: ' + r1.url);
-      //   console.log(r1);
-      //   console.log('------------');
-      // }).catch(function (err) {
-      //   console.error('error: %j', err);
-      // });
+
+      const filename = document.getElementById("filepath").value + '/' + document.getElementById("filename").value;
+      console.info('Filename: ' + filename);
+
+      client.put(filename, file).then(function (r1) {
+        if (r1.url) {
+          document.getElementById("url-show").innerText = r1.url;
+        }
+        console.log('put success: ' + r1.url);
+        console.log(r1);
+        console.log('------------');
+      }).catch(function (err) {
+        console.error('error: %j', err);
+      });
     });
 </script>
 </body>

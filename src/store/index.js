@@ -116,7 +116,7 @@ export default createStore({
       localStorage.setItem('version', playload.ver);
       localStorage.setItem('config', JSON.stringify(playload.config));
     },
-    // 更新用户状态
+    // 设置用户状态
     setUser(state, loginData) {
       state.user = loginData;
       state.user.token = loginData.api_token;

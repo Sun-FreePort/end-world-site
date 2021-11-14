@@ -214,8 +214,30 @@ export default {
     },
     // 丢弃道具
     discardSubmit() {
-      this.tip = '本功能尚未开通';
-      this.tipShow = true;
+      if (this.number < 0 || this.number > this.countNow) {
+        this.tip = this.$t('goods.useLimit', { number: this.countNow });
+        this.tipShow = true;
+        return false;
+      }
+
+      this.useShow = false;
+      this.$http.post('user/consume', {
+        id: this.id,
+        number: this.number,
+      }).then((response) => {
+        this.$store.commit('setUser', response.data);
+        this.countAdd -= response.data;
+        if (this.countNow <= 0) {
+          this.$destroy();
+          this.$el.parentNode.removeChild(this.$el);
+        }
+        return true;
+      }).catch((error) => {
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
+      });
+
+      return true;
     },
     // 消耗/使用道具
     consumeSubmit() {

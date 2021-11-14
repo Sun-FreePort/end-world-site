@@ -14,7 +14,7 @@
       <Goods v-for="item in goods"
              :key="item.id"
              :id="item.id"
-             :index="item.prop_id"
+             :index="item.index"
              :count="item.number"/>
     </w-flex>
   </div>

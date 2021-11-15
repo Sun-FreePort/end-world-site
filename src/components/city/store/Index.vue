@@ -10,8 +10,9 @@
                 round>
       <strong>{{ weight }}</strong>
     </w-progress>
-    <w-flex justify-space-between class="blue-light5--bg pa1 wrap background">
+    <w-flex class="blue-light5--bg pa1 wrap background">
       <Goods v-for="item in goods"
+             class="mr4"
              :key="item.id"
              :id="item.id"
              :index="item.index"
@@ -43,6 +44,7 @@ export default {
       return this.$t('user.weight', { weight: this.$store.state.user.weight });
     },
     progress() {
+      console.info((this.$store.state.user.weight / this.$store.state.user.weight_max) * 100);
       return (this.$store.state.user.weight / this.$store.state.user.weight_max) * 100;
     },
   },

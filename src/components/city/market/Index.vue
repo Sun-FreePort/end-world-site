@@ -11,11 +11,11 @@
       </w-button>
     </div>
 
-    <div>
+    <div class="xs12 pa1">
       <w-switch
         class="ma2"
         v-model="onlyMe"
-        @update:model-value="orderList"
+        @update:model-value="orderList(-page + 1)"
         thin
         color="warning"
         :label="$t('work.onlyMe')">
@@ -31,6 +31,23 @@
            :number="item.number"
            :end_at="item.end_at"
     />
+
+    <div class="xs6 py2">
+      <w-button v-if="page > 1"
+                @click="orderList(-1)"
+                color="yellow-light2"
+                bg-color="success"
+                shadow
+                lg>{{ $t('default.last') }}</w-button>
+    </div>
+    <div class="xs6 py2">
+      <w-button v-if="page < pageMax"
+                @click="orderList(1)"
+                color="yellow-light2"
+                bg-color="success"
+                shadow
+                lg>{{ $t('default.next') }}</w-button>
+    </div>
 
     <!-- 提示 -->
     <w-dialog
@@ -62,8 +79,9 @@ export default {
   data() {
     return {
       page: 1,
+      pageMax: 1,
       onlyMe: false,
-      goodsID: 0,
+      index: 0,
       count: 0,
       orders: [],
       sellShow: false,
@@ -88,16 +106,19 @@ export default {
       this.historyShow = true;
     },
     // 获得售单列表
-    orderList() {
-      let url = `city/market?page=${this.page}&number=10`;
+    orderList(pageChange = 0) {
+      const pageNumber = 10;
+      this.page += pageChange;
+      let url = `city/market?page=${this.page}&number=${pageNumber}`;
       if (this.onlyMe) {
         url += '&self=1';
       }
-      if (this.goodsID) {
-        url += `&goods_id=${this.goodsID}`;
+      if (this.index) {
+        url += `&index=${this.index}`;
       }
       this.$http.get(url).then((response) => {
         this.count = response.data.count;
+        this.pageMax = Math.ceil(response.data.count / pageNumber);
         this.orders = response.data.data;
       }).catch((error) => {
         this.tip = this.$t(`error.${error.response.data.message}`);

@@ -1,40 +1,34 @@
 <template>
-  <div>
-    <w-card shadow @click="useOrConsume">
+  <div style="width: 99%">
+    <w-card shadow>
       <w-flex wrap class="text-center">
         <div class="xs7" style="text-align: left;">
           <div class="py1">{{ $t('market.orderTitle', {
             name: $t(`goodsName.${goods.name}`),
-            number: number + numberAdd }) }}</div>
+            number: numberNow }) }}</div>
         </div>
         <div class="xs5">
-          <div class="py1 green-dark3">{{ timeLimit }}</div>
-        </div>
-        <div class="xs12">
           <div class="py1">{{ $t('market.priceUnit', { price: price }) }}</div>
         </div>
 
-        <div class="xs6">
-          <div class="py1">
-            <w-button
-              @click="buyShow = true"
-              width="90%"
-              bg-color="success"
-              color="yellow-light2">
-              {{ $t('market.buy') }}
-            </w-button>
-          </div>
+        <div class="xs6 py1">
+          <w-button
+            @click="useOrConsume"
+            width="85%"
+            bg-color="success"
+            color="yellow-light2">
+            {{ $t('market.buy') }}
+          </w-button>
         </div>
-        <div class="xs6">
-          <div class="py1">
-            <w-button
-              @click="removeSubmit"
-              width="90%"
-              bg-color="primary"
-              color="success-light2">
-              {{ $t('market.remove') }}
-            </w-button>
-          </div>
+        <div class="xs6 py1">
+          <w-button
+            v-if="user_id === user.id"
+            @click="removeSubmit"
+            width="85%"
+            bg-color="primary"
+            color="success-light2">
+            {{ $t('market.remove') }}
+          </w-button>
         </div>
       </w-flex>
     </w-card>
@@ -105,6 +99,12 @@ export default {
     };
   },
   computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    numberNow() {
+      return this.number + this.numberAdd;
+    },
     goods() {
       return this.$store.state.config.goods[this.index - 1] ?? {
         name: '',
@@ -126,13 +126,13 @@ export default {
   methods: {
     buySubmit() {
       const { user } = this.$store.state;
-      if (user < this.got * this.price) {
-        this.tip = this.$t('market.buyMoneyLimit', { number: Math.floor(user / this.price) });
+      if (user.money < this.got * this.price) {
+        this.tip = this.$t('market.buyMoneyLimit', { number: Math.floor(user.money / this.price) });
         this.tipShow = true;
         return false;
       }
-      if (this.got < 1 || this.got > this.number) {
-        this.tip = this.$t('market.buyCountLimit', { number: this.got });
+      if (this.got < 1 || (this.got > this.number && this.number > 0)) {
+        this.tip = this.$t('market.buyCountLimit', { number: this.number });
         this.tipShow = true;
         return false;
       }
@@ -176,13 +176,15 @@ export default {
         return false;
       }
       this.$store.commit('setSubmitting');
-      this.buyShow = false;
 
       this.$http.delete(`city/market?id=${this.id}`).then(() => {
         this.$store.commit('cancelSubmitting');
         this.overdue = true;
-        this.numberAdd -= this.number;
+        this.$el.parentNode.removeChild(this.$el);
       }).catch((error) => {
+        if (error.response.data.message === 'order405') {
+          this.$el.parentNode.removeChild(this.$el);
+        }
         this.tip = this.$t(`error.${error.response.data.message}`);
         this.tipShow = true;
       });

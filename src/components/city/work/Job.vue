@@ -145,10 +145,10 @@ export default {
         this.$store.commit('setWork', response.data);
         this.$store.commit('changeUserEnergy', -this.building.energy * this.hour);
         this.amountAdd -= 1;
+        if (this.amountNow <= 0) {
+          this.$el.parentNode.removeChild(this.$el);
+        }
       }).catch((error) => {
-        this.tip = this.$t(`error.${error.response.data.message}`);
-        this.tipShow = true;
-
         if (error.response.data.message === 'work201') {
           this.$http.get('user/work')
             .then((response) => {
@@ -156,7 +156,12 @@ export default {
             });
         } else if (error.response.data.message === 'job403') {
           this.amountAdd -= this.amount;
+          if (this.amountNow <= 0) {
+            this.$el.parentNode.removeChild(this.$el);
+          }
         }
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
       });
 
       return true;

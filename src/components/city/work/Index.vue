@@ -6,7 +6,7 @@
         <w-switch
           class="ma2"
           v-model="onlyMe"
-          @update:model-value="workList"
+          @update:model-value="workList(-page + 1)"
           thin
           color="warning"
           :label="$t('work.onlyMe')">
@@ -25,6 +25,23 @@
       </div>
       <div v-else class="mb-8 pa3 blue-grey-dark2">
         {{ $t('work.zeroJob') }}
+      </div>
+
+      <div class="xs6 py2">
+        <w-button v-if="page > 1"
+                  @click="workList(-1)"
+                  color="yellow-light2"
+                  bg-color="success"
+                  shadow
+                  lg>{{ $t('default.last') }}</w-button>
+      </div>
+      <div class="xs6 py2">
+        <w-button v-if="page < pageMax"
+                  @click="workList(1)"
+                  color="yellow-light2"
+                  bg-color="success"
+                  shadow
+                  lg>{{ $t('default.next') }}</w-button>
       </div>
     </w-flex>
 
@@ -60,6 +77,7 @@ export default {
   data() {
     return {
       page: 1,
+      pageMax: 1,
       number: 10,
       onlyMe: false,
       jobsCount: 0,
@@ -90,7 +108,8 @@ export default {
     }
   },
   methods: {
-    workList() {
+    workList(pageChange = 0) {
+      this.page += pageChange;
       let url = `work/list?page=${this.page}&number=${this.number}`;
       if (this.onlyMe) {
         url += '&self=1';
@@ -99,6 +118,7 @@ export default {
         .then((response) => {
           this.jobs = response.data.data;
           this.jobsCount = response.data.count;
+          this.pageMax = Math.ceil(response.data.count / this.number);
         })
         .catch((error) => {
           this.tip = this.$t(`error.${error.response.data.message}`);

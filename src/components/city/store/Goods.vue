@@ -204,6 +204,9 @@ export default {
         number: this.number,
       }).then(() => {
         this.countAdd -= this.number;
+        if (this.countNow <= 0) {
+          this.$el.parentNode.removeChild(this.$el);
+        }
         this.tip = this.$t('market.setDone');
         this.tipShow = true;
       }).catch((error) => {
@@ -226,9 +229,8 @@ export default {
         number: this.number,
       }).then((response) => {
         this.$store.commit('setUser', response.data);
-        this.countAdd -= response.data;
+        this.countAdd -= this.number;
         if (this.countNow <= 0) {
-          this.$destroy();
           this.$el.parentNode.removeChild(this.$el);
         }
         return true;
@@ -292,7 +294,6 @@ export default {
         });
 
         if (this.countNow <= 0) {
-          this.$destroy();
           this.$el.parentNode.removeChild(this.$el);
         }
         return true;

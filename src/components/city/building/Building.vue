@@ -365,10 +365,14 @@ export default {
           return Math.ceil((city.water / 10000) * standardProduct);
         case 2:
           return Math.ceil((city.water / 9500 - city.mine / 10500) * standardProduct);
-        case 3:
         case 4:
+          return Math.ceil((city.water / 8700 - city.mine / 13400) * standardProduct);
+        case 3:
         case 5:
         case 6:
+        case 7:
+        case 8:
+        case 9:
           return Math.ceil(standardProduct);
         default:
           console.warn('程序问题：新工作未知，无法处理');

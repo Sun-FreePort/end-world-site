@@ -221,7 +221,7 @@ export default {
       }
 
       this.useShow = false;
-      this.$http.post('user/consume', {
+      this.$http.post('user/discard', {
         id: this.id,
         number: this.number,
       }).then((response) => {

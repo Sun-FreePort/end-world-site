@@ -17,7 +17,7 @@
                 <strong style="font-size: medium">{{ $t('jobName.' + work.job) }}</strong>
               </div>
               <div class="box">
-                <p>{{ $t('work.nowWork', { money: work.profit, time: lessTime }) }}</p>
+                <p>{{ info }}</p>
               </div>
             </w-flex>
           </div>
@@ -86,6 +86,7 @@ export default {
     return {
       tipShow: false,
       tip: '',
+      info: '',
       progress: 0,
     };
   },
@@ -105,7 +106,10 @@ export default {
       const time = this.$store.state.work.end_at - this.$store.getters.tsNow;
       const min = Math.floor(time / 60);
       const sec = time % 60;
-      return `${min}:${sec}`;
+      return {
+        min,
+        sec,
+      };
     },
   },
   mounted() {
@@ -126,7 +130,13 @@ export default {
         return false;
       }
 
-      setTimeout(this.refreshProgress, 10000);
+      this.info = this.$t('work.nowWork', {
+        money: this.work.profit,
+        min: this.lessTime.min,
+        sec: this.lessTime.sec,
+      });
+
+      setTimeout(this.refreshProgress, 4000);
       return true;
     },
   },

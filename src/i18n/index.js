@@ -151,8 +151,8 @@ const messages = {
     },
     goodsName: {
       DIY: '某物',
-      copperCoin: '铜币',
-      goldCoin: '金币',
+      copperCoin: '古铜币',
+      goldCoin: '古金币',
       berry: '浆果',
       animalMeat: '兽肉',
       animalTeeth: '兽牙',

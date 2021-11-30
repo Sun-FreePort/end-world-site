@@ -12,7 +12,7 @@
     </w-progress>
     <w-flex class="blue-light5--bg pa1 wrap background">
       <Goods v-for="item in goods"
-             class="mr3"
+             class="mr1 mb1"
              :key="item.id"
              :id="item.id"
              :index="item.index"

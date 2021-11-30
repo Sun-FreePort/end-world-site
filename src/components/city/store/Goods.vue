@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="box" @click="useOrConsume">
-      <img :src="iconBase64" width="64" :alt="name">
+      <img :src="iconBase64" width="48" :alt="name">
       <p class="count">{{ countNow }}</p>
     </div>
 
@@ -12,13 +12,16 @@
       persistent
       :width="320">
       <p style="text-align: left; color: #7b828c">
-        {{ $t('goods.consumeTip') }}<br /><br />
-        {{ $t('goods.effectTitle') }}
+        {{ $t('goods.consumeTip') }}
       </p>
-      <p v-html="effect"></p>
       <w-input :label="$t('default.number')"
                type="number"
                v-model="number"></w-input>
+      <p style="text-align: left; color: #7b828c">
+        <span v-html="weight"></span> <br>
+        {{ $t('goods.effectTitle') }}
+      </p>
+      <p v-html="effect"></p>
 
       <template #actions>
         <div class="spacer" />
@@ -116,6 +119,7 @@ export default {
       number: 1,
       countAdd: 0,
       iconBase64: '',
+      weight: '',
       effect: '',
       sellShow: false,
       useShow: false,
@@ -141,6 +145,7 @@ export default {
   methods: {
     useOrConsume() {
       this.useShow = true;
+      this.weight = `每个重量 ${this.goods.weight} 克。`;
       this.effect = '';
       Object.keys(this.goods.effect).map((key) => {
         switch (key) {

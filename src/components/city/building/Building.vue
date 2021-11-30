@@ -3,7 +3,7 @@
     <w-card shadow class="box">
       <w-flex justify-space-between class="blue-light5--bg pa1">
         <div class="line">
-          <img :src="building.icon" width="64" :alt="name">
+          <img :src="building.icon" width="48" :alt="name">
         </div>
         <div class="line">
           <p>{{ building.name }}</p>

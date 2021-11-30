@@ -17,11 +17,10 @@
             label>
             {{ monster.hp }}
           </w-progress>
-          <img width="140"
+          <img width="170"
                height="170"
                alt="Enemy"
                class="pt1"
-               style="transform: scaleX(-1);"
                :src="monster.icon">
         </div>
       </div>
@@ -207,7 +206,7 @@ export default {
       .then((response) => {
         this.monster = response.data.monster;
         if (this.monster && !this.monster.icon) {
-          this.monster.icon = this.$store.state.config.monster[this.monster.id].icon;
+          this.monster.icon = this.$store.state.config.monster[this.monster.id - 1].icon;
         }
         this.$store.commit('setUser', response.data.user);
         if (response.data.local) {
@@ -247,9 +246,10 @@ export default {
 
           this.monster = response.data;
           if (!this.monster.icon) {
-            this.monster.icon = this.$store.state.config.monster[this.monster.id].icon;
+            this.monster.icon = this.$store.state.config.monster[this.monster.id - 1].icon;
           }
-          this.addInfo(2, this.$t('outskirts.adventure', {
+          const random = Math.floor(Math.random() * 2);
+          this.addInfo(2, this.$t(`outskirts.adventure${random}`, {
             monster: this.monster.name,
           }));
           return true;

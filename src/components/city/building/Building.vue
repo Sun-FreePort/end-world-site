@@ -74,7 +74,7 @@
         persistent
         :width="320">
       <p class="tipsText">{{ $t('building.publishJobTip') }}<br /><br /></p>
-      <w-input :label="$t('goodsName.copperCoin')"
+      <w-input :label="$t('goodsName.coin')"
                type="number"
                v-model="pay"></w-input>
 

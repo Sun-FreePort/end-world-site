@@ -14,6 +14,7 @@ export default createStore({
       exp: 0,
       gold: 0,
       helmet_id: 0,
+      bag_id: 0,
       hp: 0,
       hp_max: 0,
       energy: 0,
@@ -31,6 +32,7 @@ export default createStore({
       vip_at: 0,
       weapon_id: 0,
     },
+    bag: [],
     fight: {},
     building: [],
     work: null,
@@ -122,6 +124,13 @@ export default createStore({
       state.user.token = loginData.api_token;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
+    // 重置背包
+    setBag(state, bagData) {
+      console.info(bagData);
+      console.info(bagData.length);
+      console.info('---------');
+      state.bag = bagData;
+    },
     // 锁住提交状态
     setSubmitting(state) {
       state.submitting = true;
@@ -140,7 +149,7 @@ export default createStore({
       localStorage.removeItem('stateWork');
       localStorage.removeItem('stateBuilding');
     },
-    // 刷新用户缓存
+    // 刷新用户全部缓存
     refreshUser(state, playload) {
       state.work = playload.work;
       state.building = playload.building;
@@ -189,6 +198,34 @@ export default createStore({
     // 更新用户铜币
     changeUserMoney(state, val) {
       state.user.money += val;
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 更新用户快乐
+    changeUserHappy(state, val) {
+      state.user.happy += val;
+      if (state.user.happy > state.user.happy_max) {
+        state.user.happy = state.user.happy_max;
+      }
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 更新用户最大攻击
+    changeUserAttackMax(state, val) {
+      state.user.attack_max += val;
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 更新用户最小攻击
+    changeUserAttackMin(state, val) {
+      state.user.attack_min += val;
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 更新用户闪避
+    changeUserNimble(state, val) {
+      state.user.nimble += val;
+      localStorage.setItem('stateUser', JSON.stringify(state.user));
+    },
+    // 更新用户防御
+    changeUserDefence(state, val) {
+      state.user.defence += val;
       localStorage.setItem('stateUser', JSON.stringify(state.user));
     },
     // 更新用户负重

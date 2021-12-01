@@ -13,7 +13,7 @@
     <w-flex class="blue-light5--bg pa1 wrap background">
       <Goods v-for="item in goods"
              class="mr1 mb1"
-             :key="item.id"
+             :key="item.interim"
              :id="item.id"
              :index="item.index"
              :count="item.number"/>
@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      goods: [],
+      interim: 1,
     };
   },
   computed: {
@@ -43,6 +43,15 @@ export default {
       }
       return this.$t('user.weight', { weight: this.$store.state.user.weight });
     },
+    goods() {
+      const { bag } = this.$store.state;
+      for (let i = 0; i < bag.length; i += 1) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.interim += 1;
+        bag[i].interim = this.interim;
+      }
+      return bag;
+    },
     progress() {
       return (this.$store.state.user.weight / this.$store.state.user.weight_max) * 100;
     },
@@ -50,7 +59,8 @@ export default {
   mounted() {
     this.$http.get('user/property')
       .then((response) => {
-        this.goods = response.data;
+        console.info(response.data);
+        this.$store.commit('setBag', response.data);
       })
       .catch((error) => {
         console.error(error);

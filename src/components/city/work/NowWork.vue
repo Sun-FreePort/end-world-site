@@ -26,7 +26,7 @@
 
       <template #actions>
         <div class="spacer"></div>
-        <w-button bg-color="error" class="mr2">{{ $t('work.end') }}</w-button>
+        <w-button bg-color="error" @click="endJob" class="mr2">{{ $t('work.end') }}</w-button>
         <w-button bg-color="warning" class="mr2">{{ $t('default.detail') }}</w-button>
       </template>
     </w-card>
@@ -100,17 +100,6 @@ export default {
       }
       return this.$store.state.work;
     },
-    lessTime() {
-      if (!this.$store.state.work) return 0;
-
-      const time = this.$store.state.work.end_at - this.$store.getters.tsNow;
-      const min = Math.floor(time / 60);
-      const sec = time % 60;
-      return {
-        min,
-        sec,
-      };
-    },
   },
   mounted() {
     if (!this.$store.state.work) return false;
@@ -121,6 +110,8 @@ export default {
   },
   methods: {
     refreshProgress() {
+      setTimeout(this.refreshProgress, 3000);
+
       const timeAll = 3600 * this.$store.state.work.hour;
       const timeDone = timeAll - (this.$store.state.work.end_at - this.$store.getters.tsNow);
       this.progress = (timeDone / timeAll) * 100;
@@ -130,14 +121,23 @@ export default {
         return false;
       }
 
-      this.info = this.$t('work.nowWork', {
-        money: this.work.profit,
-        min: this.lessTime.min,
-        sec: this.lessTime.sec,
-      });
+      if (!this.$store.state.work) return 0;
 
-      setTimeout(this.refreshProgress, 4000);
+      const time = this.$store.state.work.end_at - this.$store.getters.tsNow;
+      const min = Math.floor(time / 60);
+      const sec = time % 60;
+      this.info = this.$t('work.nowWork', { money: this.work.profit, min, sec });
+
       return true;
+    },
+    endJob() {
+      this.$http.delete('work').then((response) => {
+        this.$store.commit('changeUserMoney', response.data - this.$store.state.user.money);
+        this.$store.commit('setWork', null);
+      }).catch((error) => {
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
+      });
     },
   },
 };

@@ -11,15 +11,22 @@
       </w-button>
     </div>
 
-    <div class="xs12 pa1">
+    <div class="xs6 pt1 pb2">
       <w-switch
         class="ma2"
+        color="warning"
         v-model="onlyMe"
         @update:model-value="orderList(-page + 1)"
-        thin
-        color="warning"
-        :label="$t('work.onlyMe')">
-      </w-switch>
+        :label="$t('work.onlyMe')"
+        thin></w-switch>
+    </div>
+
+    <div class="xs6 pt1 pb2">
+      <w-select :items="goodsList"
+                v-model="index"
+                @item-click="orderList(-page + 1)"
+                outline
+                tile>{{ $t(`market.filter`) }}</w-select>
     </div>
 
     <Order v-for="item in orders"
@@ -82,6 +89,7 @@ export default {
       pageMax: 1,
       onlyMe: false,
       index: 0,
+      goodsList: [],
       count: 0,
       orders: [],
       sellShow: false,
@@ -92,6 +100,18 @@ export default {
   },
   mounted() {
     this.orderList();
+
+    const goodsConfig = this.$store.state.config.goods;
+    this.goodsList = [{
+      label: this.$t('goodsName.all'),
+      value: 0,
+    }];
+    for (let i = 0; i < this.$store.state.config.goods.length; i += 1) {
+      this.goodsList.push({
+        label: this.$t(`goodsName.${goodsConfig[i].name}`),
+        value: goodsConfig[i].id,
+      });
+    }
 
     return true;
   },
@@ -107,6 +127,7 @@ export default {
     },
     // 获得售单列表
     orderList(pageChange = 0) {
+      console.info(this.index);
       const pageNumber = 10;
       this.page += pageChange;
       let url = `city/market?page=${this.page}&number=${pageNumber}`;

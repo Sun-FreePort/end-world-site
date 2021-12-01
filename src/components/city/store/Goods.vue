@@ -10,7 +10,7 @@
       v-model="useShow"
       :title="$t('goods.consume') + name"
       persistent
-      :width="320">
+      :fullscreen="true">
       <p style="text-align: left; color: #7b828c">
         {{ $t('goods.consumeTip') }}
       </p>
@@ -32,10 +32,20 @@
           {{ $t('market.sell') }}
         </w-button>
         <w-button
+          v-if="goods.type === 1"
           class="mr2"
           @click="consumeSubmit"
-          bg-color="error">
+          bg-color="success"
+          color="warning-light3">
           {{ $t('goods.consume') }}
+        </w-button>
+        <w-button
+          v-if="goods.type !== 1"
+          class="mr2"
+          @click="equipSubmit"
+          bg-color="primary"
+          color="success-light2">
+          {{ $t('goods.equip') }}
         </w-button>
         <w-button
           class="mr2"
@@ -56,7 +66,7 @@
       v-model="sellShow"
       :title="$t('market.sell') + name"
       persistent
-      :width="320">
+      :fullscreen="true">
       <p style="text-align: left; color: #7b828c">
         {{ $t('market.sellTip') }}<br /><br />
         {{ $t('goods.effectTitle') }}
@@ -88,15 +98,16 @@
     <!-- 提示 -->
     <w-dialog
       v-model="tipShow"
-      :width="250">
+      :fullscreen="true">
       <p>{{ tip }}</p>
 
       <template #actions>
         <div class="spacer" />
         <w-button @click="tipShow = false"
+                  class="pb1"
+                  style="width: 40%"
                   bg-color="info"
-                  dark
-                  lg>
+                  dark>
           {{ $t('default.know') }}
         </w-button>
       </template>
@@ -246,6 +257,65 @@ export default {
 
       return true;
     },
+    // 装备道具
+    equipSubmit() {
+      this.useShow = false;
+      this.$http.post('user/equip', {
+        id: this.id,
+        index: this.index,
+      }).then((response) => {
+        this.$store.commit('setUser', response.data);
+        this.countAdd -= 1;
+        if (this.countNow <= 0) {
+          this.$el.parentNode.removeChild(this.$el);
+        }
+        return true;
+      }).catch((error) => {
+        this.tip = this.$t(`error.${error.response.data.message}`);
+        this.tipShow = true;
+      });
+
+      return true;
+    },
+    // 效果更新
+    effectTook(effect, count) {
+      Object.keys(effect).map((key) => {
+        const val = effect[key];
+        switch (key) {
+          case 'hp-p':
+            this.$store.commit('changeUserHp', val * count);
+            break;
+          case 'hungry-p':
+            this.$store.commit('changeUserHungry', val * count);
+            break;
+          case 'energy-p':
+            this.$store.commit('changeUserEnergy', val * count);
+            break;
+          case 'happy-p':
+            this.$store.commit('changeUserHappy', val * count);
+            break;
+          case 'att-a':
+            this.$store.commit('changeUserAttackMax', val * count);
+            break;
+          case 'att-i':
+            this.$store.commit('changeUserAttackMin', val * count);
+            break;
+          case 'def':
+            this.$store.commit('changeUserDefence', val * count);
+            break;
+          case 'money':
+            this.$store.commit('changeUserMoney', val * count);
+            break;
+          case 'gold':
+            this.$store.commit('changeUserGold', val * count);
+            break;
+          default:
+            console.error(`${key} is new effect in goods config`);
+            break;
+        }
+        return true;
+      });
+    },
     // 消耗/使用道具
     consumeSubmit() {
       if (this.number < 0 || this.number > this.countNow) {
@@ -260,43 +330,7 @@ export default {
         number: this.number,
       }).then((response) => {
         this.countAdd -= response.data;
-
-        Object.keys(this.goods.effect).map((key) => {
-          const val = this.goods.effect[key];
-          switch (key) {
-            case 'hp-p':
-              this.$store.commit('changeUserHp', val * response.data);
-              break;
-            case 'hungry-p':
-              this.$store.commit('changeUserHungry', val * response.data);
-              break;
-            case 'energy-p':
-              this.$store.commit('changeUserEnergy', val * response.data);
-              break;
-            case 'happy-p':
-              this.$store.commit('changeUserHappy', val * response.data);
-              break;
-            case 'att-a':
-              // $user['attack_max'] += val * response.data;
-              break;
-            case 'att-i':
-              // $user['attack_min'] += val * response.data;
-              break;
-            case 'def':
-              // $user['nimble'] += val * response.data;
-              break;
-            case 'money':
-              this.$store.commit('changeUserMoney', val * response.data);
-              break;
-            case 'gold':
-              this.$store.commit('changeUserGold', val * response.data);
-              break;
-            default:
-              console.error(`${key} is new effect in goods config`);
-              break;
-          }
-          return true;
-        });
+        this.effectTook(this.goods.effect, response.data);
 
         if (this.countNow <= 0) {
           this.$el.parentNode.removeChild(this.$el);

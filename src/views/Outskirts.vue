@@ -277,16 +277,10 @@ export default {
 
       this.$http.get('fight/attack')
         .then((response) => {
-          console.info(response.data);
-          switch (response.data.effect) {
-            case 1:
-              this.addInfo(2, this.$t('outskirts.injuries', {
-                monster: this.monster.name,
-                injury: response.data.injury,
-              }));
-              this.monster = null;
-              this.$store.commit('changeUserHp', -response.data.injury);
-              break;
+          let random = 0;
+
+          setTimeout(() => this.effectMonsterLater(response), 1000);
+          switch (response.data.effectUser) {
             case 2:
               if (response.data.trophy) {
                 this.addInfo(2, this.$t('outskirts.winGot', {
@@ -311,15 +305,27 @@ export default {
                 attack: response.data.attack,
                 injury: response.data.injury,
               }));
-              setTimeout(() => {
-                this.$store.commit('changeUserHp', -response.data.injury);
-                this.addInfo(2, this.$t('outskirts.defence', {
-                  monster: this.monster.name,
-                  attack: response.data.attack,
-                  injury: response.data.injury,
-                }));
-                this.attackActive = false;
-              }, 1000);
+              break;
+            case 4:
+              this.attackActive = true;
+              this.$store.commit('changeUserEnergy', -1);
+              this.monster.hp -= response.data.attack;
+              random = Math.floor(Math.random() * 2);
+              this.addInfo(2, this.$t(`outskirts.gbh${random}`, {
+                monster: this.monster.name,
+                attack: response.data.attack,
+                injury: response.data.injury,
+              }));
+              break;
+            case 5:
+              // 怪物闪避成功
+              this.attackActive = true;
+              this.$store.commit('changeUserEnergy', -1);
+              random = Math.floor(Math.random() * 2);
+              this.addInfo(2, this.$t(`outskirts.nimble${random}`, {
+                target: this.monster.name,
+                self: this.user.name,
+              }));
               break;
             default:
               break;
@@ -337,6 +343,42 @@ export default {
               break;
           }
         });
+    },
+    effectMonsterLater(response) {
+      if (this.monster == null) return;
+
+      let random = 0;
+      switch (response.data.effectMonster) {
+        case 1:
+          this.monster = null;
+          this.$store.commit('changeUserHp', -response.data.injury);
+          this.addInfo(2, this.$t('outskirts.injuries', {
+            monster: this.monster.name,
+            injury: response.data.injury,
+          }));
+          break;
+        case 3:
+          this.$store.commit('changeUserHp', -response.data.injury);
+          this.addInfo(2, this.$t('outskirts.defence', {
+            monster: this.monster.name,
+            attack: response.data.attack,
+            injury: response.data.injury,
+          }));
+          this.attackActive = false;
+          break;
+        case 5:
+          // 玩家闪避成功
+          this.attackActive = true;
+          this.$store.commit('changeUserEnergy', -1);
+          random = Math.floor(Math.random() * 2);
+          this.addInfo(2, this.$t(`outskirts.nimble${random}`, {
+            target: this.user.name,
+            self: this.monster.name,
+          }));
+          break;
+        default:
+          break;
+      }
     },
     runaway() {
       if (this.$store.state.submitting) {

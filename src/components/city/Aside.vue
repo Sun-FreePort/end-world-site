@@ -190,11 +190,11 @@ export default {
     },
     goldCoin() {
       if (!this.$store.state.config.goods.length) return '';
-      return this.$store.state.config.goods[1].icon;
+      return this.getImgForGoods(this.$store.state.config.goods[1].icon);
     },
     copperCoin() {
       if (!this.$store.state.config.goods.length) return '';
-      return this.$store.state.config.goods[0].icon;
+      return this.getImgForGoods(this.$store.state.config.goods[0].icon);
     },
     happy() {
       return ((this.user.happy / this.user.happy_max) * 100);
@@ -226,6 +226,12 @@ export default {
     }
   },
   methods: {
+    getImgForGoods(name) {
+      if (!name) return '';
+
+      // eslint-disable-next-line global-require,import/no-dynamic-require
+      return require(`@/assets/goods/${name}`);
+    },
     gotoOutskirts() {
       const info = [{
         ts: this.$store.getters.tsNow,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="box" @click="useOrConsume">
-      <img :src="iconBase64" width="48" :alt="name">
+      <img :src="getImgForGoods(goods.icon)" width="48" height="48" :alt="name">
       <p class="count">{{ countNow }}</p>
     </div>
 
@@ -129,7 +129,6 @@ export default {
       price: null,
       number: 1,
       countAdd: 0,
-      iconBase64: '',
       weight: '',
       effect: '',
       sellShow: false,
@@ -151,9 +150,14 @@ export default {
   },
   mounted() {
     this.name = this.$t(`goodsName.${this.goods.name}`);
-    this.iconBase64 = this.goods.icon;
   },
   methods: {
+    getImgForGoods(name) {
+      if (!name) return '';
+
+      // eslint-disable-next-line global-require,import/no-dynamic-require
+      return require(`@/assets/goods/${name}`);
+    },
     useOrConsume() {
       this.useShow = true;
       this.weight = `每个重量 ${this.goods.weight} 克。`;

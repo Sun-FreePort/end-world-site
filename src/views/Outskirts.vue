@@ -364,11 +364,9 @@ export default {
             attack: response.data.attack,
             injury: response.data.injury,
           }));
-          this.attackActive = false;
           break;
         case 5:
           // 玩家闪避成功
-          this.attackActive = true;
           this.$store.commit('changeUserEnergy', -1);
           random = Math.floor(Math.random() * 2);
           this.addInfo(2, this.$t(`outskirts.nimble${random}`, {
@@ -379,6 +377,7 @@ export default {
         default:
           break;
       }
+      this.attackActive = false;
     },
     runaway() {
       if (this.$store.state.submitting) {

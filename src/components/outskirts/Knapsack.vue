@@ -27,12 +27,12 @@
           <w-flex column class="wrapper">
             <div class="slot mt12"><img
               width="48"
-              :src="bag.icon"
+              :src="getImgForGoods(bag.icon)"
               @click="showEquip('bag')"
               alt="背   包"></div>
             <div class="slot mt8"><img
               width="48"
-              :src="weapon.icon"
+              :src="getImgForGoods(weapon.icon)"
               @click="showEquip('weapon')"
               alt="武   器"></div>
           </w-flex>
@@ -41,7 +41,7 @@
           <w-flex column justify-space-between class="wrapper">
             <div class="slot"><img
               width="48"
-              :src="helmet.icon"
+              :src="getImgForGoods(helmet.icon)"
               @click="showEquip('helmet')"
               alt="头  部"></div>
             <div class="slot"><img
@@ -62,7 +62,7 @@
           <w-flex column justify-center class="wrapper">
             <div class="slot mt12"><img
               width="48"
-              :src="shield.icon"
+              :src="getImgForGoods(shield.icon)"
               @click="showEquip('shield')"
               alt="副   手"></div>
             <div class="slot mt8"><img
@@ -208,6 +208,12 @@ export default {
     };
   },
   methods: {
+    getImgForGoods(name) {
+      if (!name) return '';
+
+      // eslint-disable-next-line global-require,import/no-dynamic-require
+      return require(`@/assets/goods/${name}`);
+    },
     close() {
       this.$emit('eventname', { type: 'show' });
     },

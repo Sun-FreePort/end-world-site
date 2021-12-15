@@ -15,7 +15,7 @@ export default {
       .then((response) => {
         const hash = MD5(localStorage.getItem('config')).toString();
         console.info(`Config hash is: ${hash}`);
-        if (this.$store.state.ver >= response.data.ver && response.data.hash === hash) {
+        if (this.$store.state.ver >= response.data.ver) {
           return;
         }
 

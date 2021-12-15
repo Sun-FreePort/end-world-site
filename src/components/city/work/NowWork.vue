@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     refreshProgress() {
-      setTimeout(this.refreshProgress, 3000);
+      setTimeout(this.refreshProgress, 1100);
 
       const timeAll = 3600 * this.$store.state.work.hour;
       const timeDone = timeAll - (this.$store.state.work.end_at - this.$store.getters.tsNow);
